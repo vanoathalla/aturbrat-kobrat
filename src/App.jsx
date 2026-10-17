@@ -16,6 +16,7 @@ import SquadPage from './pages/SquadPage';
 import PortfolioPage from './pages/PortfolioPage';
 import FAQPage from './pages/FAQPage';
 import AdminPage from './pages/AdminPage';
+import ArchivePage from './pages/ArchivePage';
 
 function AppContent() {
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
@@ -54,6 +55,7 @@ function AppContent() {
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/calculator" element={<CalculatorPage onShowToast={showToast} />} />
             <Route path="/squad" element={<SquadPage />} />
+            <Route path="/archive" element={<ArchivePage />} />
             <Route path="/portfolio" element={<PortfolioPage />} />
             <Route path="/faq" element={<FAQPage />} />
             {/* Dedicated Protected Admin Route */}

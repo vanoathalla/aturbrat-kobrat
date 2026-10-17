@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, Calculator, Terminal, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Calculator, Terminal, ChevronRight, CheckCircle2, Camera, MapPin, Calendar, Sparkles } from 'lucide-react';
 import { KOBRAT_DATA } from '../data/kobratData';
+import { ARCHIVE_DATA } from '../data/archiveData';
 import { useApp } from '../context/AppContext';
 
 export default function Home({ onOpenTerminal }) {
@@ -30,7 +31,7 @@ export default function Home({ onOpenTerminal }) {
           <span className="hero-tag-secondary">{t.hero.badge}</span>
         </div>
 
-        {/* Main Hero Header */}
+        {/* Main Hero Header: Collaborated Circle & Services */}
         <div className="hero-content-center">
           <h1 className="hero-title">
             {t.hero.titlePre}<br />
@@ -48,6 +49,10 @@ export default function Home({ onOpenTerminal }) {
               <span>{t.hero.btnCalc}</span>
               <ArrowRight size={16} />
             </Link>
+            <Link to="/archive" className="btn-secondary hero-btn">
+              <Camera size={18} className="camera-icon" />
+              <span>{t.hero.btnVault}</span>
+            </Link>
             <Link to="/services" className="btn-secondary hero-btn">
               <span>{t.hero.btnServices}</span>
             </Link>
@@ -58,7 +63,7 @@ export default function Home({ onOpenTerminal }) {
           </div>
         </div>
 
-        {/* Stats Grid */}
+        {/* Stats Grid: Collaborated Circle & Project Stats */}
         <div className="stats-grid">
           {t.hero.stats.map((stat, idx) => (
             <div key={idx} className="stat-card glass-panel">
@@ -67,6 +72,39 @@ export default function Home({ onOpenTerminal }) {
               <span className="stat-desc">{stat.desc}</span>
             </div>
           ))}
+        </div>
+
+        {/* SECTION: Bukan Sekadar Jasa, Ini Tongkrongan Kami (Memories Teaser) */}
+        <div className="home-vault-teaser glass-panel">
+          <div className="vault-teaser-header">
+            <div>
+              <span className="section-tag">{t.hero.vaultTeaserTag}</span>
+              <h2 className="deck-title">{t.hero.vaultTeaserTitle}</h2>
+              <p className="vault-teaser-sub">{t.hero.vaultTeaserDesc}</p>
+            </div>
+            <Link to="/archive" className="btn-primary teaser-view-btn">
+              <span>{t.hero.seeVault}</span>
+              <ArrowRight size={16} />
+            </Link>
+          </div>
+
+          <div className="vault-teaser-grid">
+            {ARCHIVE_DATA.memories.slice(0, 3).map((item) => (
+              <div key={item.id} className="teaser-polaroid-card" onClick={() => navigate('/archive')}>
+                <div className="teaser-polaroid-img-wrap">
+                  <img src={item.image} alt={item.title} className="teaser-img" />
+                  <span className="teaser-polaroid-tag">#{item.category.toUpperCase()}</span>
+                </div>
+                <div className="teaser-polaroid-info">
+                  <div className="teaser-meta">
+                    <MapPin size={12} className="loc-icon" />
+                    <span>{item.location}</span>
+                  </div>
+                  <h4 className="teaser-card-title">{item.title}</h4>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Quick Highlights Deck: Layanan Unggulan */}

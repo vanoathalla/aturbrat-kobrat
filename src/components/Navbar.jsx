@@ -36,6 +36,7 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
     { label: t.nav.services, path: "/services" },
     { label: t.nav.calculator, path: "/calculator" },
     { label: t.nav.squad, path: "/squad" },
+    { label: t.nav.vault, path: "/archive" },
     { label: t.nav.portfolio, path: "/portfolio" },
     { label: t.nav.faq, path: "/faq" },
   ];
@@ -58,7 +59,11 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
           </div>
           <div className="ios-brand-text">
             <span className="brand-title">KOBRAT</span>
-            <span className="brand-dot"></span>
+            <span className="brand-collab-badge">
+              <span className="collab-circle">CIRCLE</span>
+              <span className="collab-sep">×</span>
+              <span className="collab-service">{lang === 'id' ? 'JASA' : 'DEV'}</span>
+            </span>
           </div>
         </Link>
 

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg_warkop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1c0d15"/>
+      <stop offset="100%" stop-color="#0e060a"/>
+    </linearGradient>
+    <linearGradient id="neon_red" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#e11d48"/>
+      <stop offset="100%" stop-color="#fb7185"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="450" fill="url(#bg_warkop)"/>
+  <!-- Ambient Warm Lighting -->
+  <circle cx="300" cy="150" r="160" fill="#e11d48" opacity="0.12"/>
+  <circle cx="480" cy="220" r="120" fill="#fbbf24" opacity="0.08"/>
+  <!-- Table Surface -->
+  <polygon points="50,380 550,380 580,450 20,450" fill="#14090f" stroke="rgba(255,255,255,0.08)"/>
+  <!-- Coffee Cups & Mugs -->
+  <rect x="180" y="320" width="45" height="55" rx="6" fill="#be123c"/>
+  <ellipse cx="202" cy="320" rx="22" ry="7" fill="#4c0519"/>
+  <path d="M225 330 C238 330, 238 355, 225 355" stroke="#be123c" stroke-width="4" fill="none"/>
+  <!-- Laptop on Table -->
+  <polygon points="260,350 420,350 440,375 240,375" fill="#334155"/>
+  <rect x="270" y="250" width="140" height="100" rx="6" fill="#0f172a" stroke="#64748b" stroke-width="3"/>
+  <rect x="280" y="260" width="120" height="80" rx="3" fill="#020617"/>
+  <text x="290" y="280" fill="#e11d48" font-family="monospace" font-size="10">const kobrat = [];</text>
+  <text x="290" y="295" fill="#22c55e" font-family="monospace" font-size="10">// 03:42 AM warkop</text>
+  <text x="290" y="310" fill="#38bdf8" font-family="monospace" font-size="10">deploy(prod);</text>
+  <!-- Second Drink -->
+  <rect x="460" y="310" width="35" height="65" rx="4" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.2)"/>
+  <line x1="477" y1="290" x2="477" y2="365" stroke="#fb7185" stroke-width="3"/>
+  <!-- Stamp watermark -->
+  <rect x="40" y="40" width="130" height="30" rx="6" fill="rgba(225,29,72,0.15)" stroke="rgba(225,29,72,0.3)"/>
+  <text x="105" y="60" fill="#fb7185" font-family="monospace" font-weight="bold" font-size="11" text-anchor="middle">KOBRAT ARCHIVE #01</text>
+</svg>

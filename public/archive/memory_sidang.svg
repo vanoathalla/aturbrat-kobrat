@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg_sidang" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#140a12"/>
+      <stop offset="100%" stop-color="#080307"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="450" fill="url(#bg_sidang)"/>
+  <circle cx="300" cy="180" r="140" fill="#e11d48" opacity="0.15"/>
+  <!-- Graduation / Toga Cap Iconography -->
+  <polygon points="300,100 440,150 300,200 160,150" fill="#1e111a" stroke="#e11d48" stroke-width="4"/>
+  <polygon points="210,170 300,210 390,170 390,220 210,220" fill="#140810" stroke="#be123c" stroke-width="2"/>
+  <circle cx="300" cy="150" r="6" fill="#fb7185"/>
+  <line x1="300" y1="150" x2="380" y2="190" stroke="#fbbf24" stroke-width="3"/>
+  <circle cx="380" cy="190" r="5" fill="#fbbf24"/>
+  <!-- 8 Friends Silhouette Dots -->
+  <g transform="translate(140, 290)">
+    <circle cx="30" cy="30" r="16" fill="#e11d48"/>
+    <circle cx="70" cy="20" r="18" fill="#fb7185"/>
+    <circle cx="115" cy="25" r="17" fill="#be123c"/>
+    <circle cx="160" cy="18" r="19" fill="#f43f5e"/>
+    <circle cx="205" cy="22" r="18" fill="#e11d48"/>
+    <circle cx="250" cy="28" r="16" fill="#fb7185"/>
+    <circle cx="295" cy="20" r="18" fill="#be123c"/>
+    <circle cx="340" cy="25" r="17" fill="#f43f5e"/>
+    <!-- Hugging hands line -->
+    <path d="M20 70 Q180 85 350 70" stroke="rgba(255,255,255,0.2)" stroke-width="3" fill="none"/>
+  </g>
+  <!-- Stamp watermark -->
+  <rect x="40" y="40" width="130" height="30" rx="6" fill="rgba(225,29,72,0.15)" stroke="rgba(225,29,72,0.3)"/>
+  <text x="105" y="60" fill="#fb7185" font-family="monospace" font-weight="bold" font-size="11" text-anchor="middle">KOBRAT ARCHIVE #02</text>
+  <text x="300" y="410" fill="#cbd5e1" font-family="'Plus Jakarta Sans', sans-serif" font-weight="bold" font-size="14" text-anchor="middle" letter-spacing="1">"LULUS BARENG, SUKSES BARENG"</text>
+</svg>

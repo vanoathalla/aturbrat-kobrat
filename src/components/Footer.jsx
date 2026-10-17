@@ -38,7 +38,7 @@ export default function Footer({ onShowToast }) {
               </div>
               <div className="brand-info">
                 <span className="brand-name">KOBRAT</span>
-                <span className="brand-sub">// dev_syndicate</span>
+                <span className="brand-sub">{lang === 'id' ? '// circle_tongkrongan × jasa_dev' : '// circle_vault × dev_syndicate'}</span>
               </div>
             </div>
             <p className="footer-about">
