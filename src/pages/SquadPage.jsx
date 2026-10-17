@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Users, ExternalLink, Code2, Sparkles, Terminal, Activity, ShieldCheck, Lock } from 'lucide-react';
+import { Users, Activity } from 'lucide-react';
 import { GithubIcon } from '../components/Icons';
 import { KOBRAT_DATA } from '../data/kobratData';
 import { useApp } from '../context/AppContext';
@@ -36,16 +35,9 @@ export default function SquadPage() {
               </span>
             </div>
 
-            {isAdminAuthenticated ? (
-              <Link to="/admin" className="btn-primary presence-bar-btn">
-                <ShieldCheck size={16} />
-                <span>Buka Admin Console</span>
-              </Link>
-            ) : (
-              <div className="presence-guest-badge">
-                <span className="mono status-tag">🟢 Live Synchronized</span>
-              </div>
-            )}
+            <div className="presence-guest-badge">
+              <span className="mono status-tag">🟢 Live Synchronized</span>
+            </div>
           </div>
         </div>
 

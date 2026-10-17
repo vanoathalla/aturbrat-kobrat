@@ -89,17 +89,7 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
             <span className="action-label mono">{onlineMembersCount} Dev Aktif</span>
           </button>
 
-          {/* If Logged In as Admin -> Show Admin Badge */}
-          {isAdminAuthenticated && (
-            <Link
-              to="/admin"
-              className="ios-action-pill admin-nav-pill"
-              title="KOBRAT Command Center"
-            >
-              <ShieldCheck size={14} className="admin-icon" />
-              <span className="mono action-label">Admin</span>
-            </Link>
-          )}
+
 
           {/* Language Toggle (ID / EN) */}
           <button
@@ -199,17 +189,7 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
               </NavLink>
             ))}
 
-            {/* Mobile Admin Link if logged in */}
-            {isAdminAuthenticated && (
-              <Link
-                to="/admin"
-                className="sheet-nav-item admin-sheet-link"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <span>🛡️ KOBRAT Command Center (Admin)</span>
-                <span className="sheet-arrow">›</span>
-              </Link>
-            )}
+
 
             {/* Mobile Actions: Lang, Theme, Audio */}
             <div className="sheet-actions-row">
