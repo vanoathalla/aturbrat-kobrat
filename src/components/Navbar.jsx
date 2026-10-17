@@ -1,12 +1,23 @@
 import React, { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { Volume2, VolumeX, Menu, X, Terminal, MessageSquare, Sun, Moon, Globe } from 'lucide-react';
+import { Volume2, VolumeX, Menu, X, Terminal, MessageSquare, Sun, Moon, Globe, Users, ShieldCheck } from 'lucide-react';
 import { ambientSynth } from '../utils/audioSynth';
 import { KOBRAT_DATA } from '../data/kobratData';
 import { useApp } from '../context/AppContext';
 
 export default function Navbar({ onOpenTerminal, onShowToast }) {
-  const { theme, toggleTheme, lang, toggleLang, t } = useApp();
+  const { 
+    theme, 
+    toggleTheme, 
+    lang, 
+    toggleLang, 
+    t, 
+    isSlotOpen, 
+    slotsCount,
+    onlineMembersCount,
+    setIsPresenceModalOpen 
+  } = useApp();
+
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -32,7 +43,7 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
   return (
     <header className="ios-navbar-wrapper">
       <div className="ios-dock-container">
-        {/* Brand Logo with red specular glow */}
+        {/* Brand Logo */}
         <Link to="/" className="ios-brand">
           <div className="ios-logo-squircle">
             <span>🐍</span>
@@ -43,7 +54,7 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
           </div>
         </Link>
 
-        {/* iOS Segmented Navigation Bar */}
+        {/* iOS Segmented Navigation Bar (Desktop) */}
         <nav className="ios-segmented-control">
           {navItems.map((item, idx) => (
             <NavLink
@@ -58,22 +69,32 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
           ))}
         </nav>
 
-        {/* Actions Deck: Audio toggle, Theme Toggle, Language Toggle, CLI, WA */}
+        {/* Actions Deck */}
         <div className="ios-actions-deck">
-          {/* Language Toggle Button (ID / EN) */}
+          {/* Presence & Slot Manager Hub Button */}
+          <button
+            onClick={() => setIsPresenceModalOpen(true)}
+            className="ios-action-pill presence-pill"
+            title="Kelola Slot & Status Anggota"
+          >
+            <span className={`status-dot ${isSlotOpen ? 'online' : 'offline'}`}></span>
+            <span className="action-label mono">{onlineMembersCount} Aktif</span>
+          </button>
+
+          {/* Language Toggle (ID / EN) */}
           <button
             onClick={() => {
               toggleLang();
               onShowToast?.(lang === 'id' ? "🌐 Language switched to English" : "🌐 Bahasa diubah ke Indonesia");
             }}
             className="ios-action-pill lang-btn"
-            title={lang === 'id' ? "Ganti ke Bahasa Inggris" : "Switch to Indonesian"}
+            title={lang === 'id' ? "Switch to English" : "Ganti ke Bahasa Indonesia"}
           >
             <Globe size={14} />
             <span className="mono">{lang.toUpperCase()}</span>
           </button>
 
-          {/* Theme Toggle Button (Dark / Light) */}
+          {/* Theme Toggle (Dark / Light) */}
           <button
             onClick={() => {
               toggleTheme();
@@ -85,22 +106,16 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
             {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
           </button>
 
-          {/* Lo-Fi Synth Toggle */}
+          {/* Lo-Fi Synth Toggle (Desktop) */}
           <button
             onClick={toggleAudio}
-            className={`ios-action-pill ${isPlayingAudio ? 'active' : ''}`}
+            className={`ios-action-pill audio-pill ${isPlayingAudio ? 'active' : ''}`}
             title="Toggle Lo-Fi Vibe"
           >
             {isPlayingAudio ? (
-              <>
-                <Volume2 size={15} className="audio-icon pulse" />
-                <span className="action-label">{t.nav.lofiOn}</span>
-              </>
+              <Volume2 size={15} className="audio-icon pulse" />
             ) : (
-              <>
-                <VolumeX size={15} />
-                <span className="action-label">{t.nav.lofiOff}</span>
-              </>
+              <VolumeX size={15} />
             )}
           </button>
 
@@ -111,7 +126,7 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
             title="Buka Terminal CLI (Ctrl+K)"
           >
             <Terminal size={14} />
-            <span className="mono">CLI</span>
+            <span className="mono action-label">CLI</span>
           </button>
 
           {/* WhatsApp Direct */}
@@ -122,10 +137,10 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
             className="ios-action-pill cta-btn"
           >
             <MessageSquare size={14} />
-            <span>{t.nav.chatWA}</span>
+            <span className="action-label">{t.nav.chatWA}</span>
           </a>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Toggle Button */}
           <button
             className="ios-mobile-btn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -140,6 +155,15 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
       {mobileMenuOpen && (
         <div className="ios-mobile-sheet">
           <div className="sheet-handle"></div>
+          
+          {/* Live Slot Status on Mobile */}
+          <div className="sheet-slot-banner">
+            <span className={`status-dot ${isSlotOpen ? 'online' : 'offline'}`}></span>
+            <span className="mono">
+              {isSlotOpen ? `OPEN SLOT (${slotsCount} Tersedia)` : 'FULL SLOT / WAITING LIST'}
+            </span>
+          </div>
+
           <div className="sheet-nav-list">
             {navItems.map((item, idx) => (
               <NavLink
@@ -154,19 +178,32 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
                 <span className="sheet-arrow">›</span>
               </NavLink>
             ))}
-            
-            {/* Mobile Language and Theme Row */}
+
+            {/* Mobile Presence Trigger */}
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setIsPresenceModalOpen(true);
+              }}
+              className="sheet-nav-item presence-sheet-btn"
+            >
+              <span>⚡ Status & Slot Manager ({onlineMembersCount} Aktif)</span>
+              <span className="sheet-arrow">›</span>
+            </button>
+
+            {/* Mobile Actions: Lang, Theme, Audio */}
             <div className="sheet-actions-row">
               <button
                 onClick={() => {
                   toggleLang();
-                  onShowToast?.(lang === 'id' ? "🌐 Language switched to English" : "🌐 Bahasa diubah ke Indonesia");
+                  onShowToast?.(lang === 'id' ? "🌐 Language: English" : "🌐 Bahasa: Indonesia");
                 }}
                 className="sheet-action-pill"
               >
                 <Globe size={15} />
-                <span>{lang === 'id' ? "Bahasa: ID (Ganti ke EN)" : "Language: EN (Switch to ID)"}</span>
+                <span>{lang.toUpperCase()}</span>
               </button>
+              
               <button
                 onClick={() => {
                   toggleTheme();
@@ -175,7 +212,12 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
                 className="sheet-action-pill"
               >
                 {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
-                <span>{theme === 'dark' ? "Mode Terang" : "Mode Gelap"}</span>
+                <span>{theme === 'dark' ? "Light" : "Dark"}</span>
+              </button>
+
+              <button onClick={toggleAudio} className="sheet-action-pill">
+                {isPlayingAudio ? <Volume2 size={15} /> : <VolumeX size={15} />}
+                <span>Lo-Fi</span>
               </button>
             </div>
 
@@ -186,7 +228,7 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
               }}
               className="sheet-nav-item mono-item"
             >
-              <span>⚡ Terminal KOBRAT CLI</span>
+              <span>💻 Terminal KOBRAT CLI</span>
               <span className="sheet-arrow">›</span>
             </button>
           </div>

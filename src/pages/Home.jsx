@@ -5,7 +5,7 @@ import { KOBRAT_DATA } from '../data/kobratData';
 import { useApp } from '../context/AppContext';
 
 export default function Home({ onOpenTerminal }) {
-  const { t } = useApp();
+  const { t, isSlotOpen, slotsCount } = useApp();
   const navigate = useNavigate();
 
   const techStacks = [
@@ -19,9 +19,13 @@ export default function Home({ onOpenTerminal }) {
       <div className="container">
         {/* iOS Dynamic Island Status Pill */}
         <div className="hero-top-badge">
-          <div className="status-indicator">
-            <span className="ping-dot"></span>
-            <span>{KOBRAT_DATA.brand.status}</span>
+          <div className={`status-indicator ${isSlotOpen ? 'open' : 'full'}`}>
+            <span className={`status-dot ${isSlotOpen ? 'online' : 'offline'}`}></span>
+            <span>
+              {isSlotOpen 
+                ? `OPEN SLOT (${slotsCount} Slot Tersedia)` 
+                : 'FULL SLOT (Waiting List)'}
+            </span>
           </div>
           <span className="hero-tag-secondary">{t.hero.badge}</span>
         </div>

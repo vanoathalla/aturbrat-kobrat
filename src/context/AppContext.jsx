@@ -1,16 +1,54 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { translations } from '../data/translations';
+import { KOBRAT_DATA } from '../data/kobratData';
 
 const AppContext = createContext();
 
 export function AppProvider({ children }) {
+  // Theme: 'dark' or 'light'
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('kobrat_theme') || 'dark';
   });
 
+  // Language: 'id' or 'en'
   const [lang, setLang] = useState(() => {
     return localStorage.getItem('kobrat_lang') || 'id';
   });
+
+  // Slot Management State
+  const [slotsCount, setSlotsCount] = useState(() => {
+    const saved = localStorage.getItem('kobrat_slots_count');
+    return saved !== null ? parseInt(saved, 10) : 3;
+  });
+
+  const [isSlotOpen, setIsSlotOpen] = useState(() => {
+    const saved = localStorage.getItem('kobrat_slot_open');
+    return saved !== null ? saved === 'true' : true;
+  });
+
+  // Squad Live Presence State (maps memberId to status)
+  const [squadPresence, setSquadPresence] = useState(() => {
+    const saved = localStorage.getItem('kobrat_squad_presence');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {}
+    }
+    // Initial defaults for all 8 members
+    const initial = {};
+    KOBRAT_DATA.squad.forEach((m, idx) => {
+      initial[m.id] = {
+        isOnline: idx === 0 || idx === 1 || idx === 6, // Aca, Plenger, Vano online by default
+        status: m.status,
+        activity: idx === 6 ? "Polishing Figma Prototypes" : "Ready for Projects",
+        lastActive: "Baru saja",
+      };
+    });
+    return initial;
+  });
+
+  // Modal open/close for Presence Hub
+  const [isPresenceModalOpen, setIsPresenceModalOpen] = useState(false);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -22,6 +60,18 @@ export function AppProvider({ children }) {
     localStorage.setItem('kobrat_lang', lang);
   }, [lang]);
 
+  useEffect(() => {
+    localStorage.setItem('kobrat_slots_count', slotsCount.toString());
+  }, [slotsCount]);
+
+  useEffect(() => {
+    localStorage.setItem('kobrat_slot_open', isSlotOpen.toString());
+  }, [isSlotOpen]);
+
+  useEffect(() => {
+    localStorage.setItem('kobrat_squad_presence', JSON.stringify(squadPresence));
+  }, [squadPresence]);
+
   const toggleTheme = () => {
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
   };
@@ -30,10 +80,44 @@ export function AppProvider({ children }) {
     setLang(prev => (prev === 'id' ? 'en' : 'id'));
   };
 
+  const updateMemberPresence = (memberId, { isOnline, status, activity }) => {
+    setSquadPresence(prev => ({
+      ...prev,
+      [memberId]: {
+        isOnline,
+        status: status || prev[memberId]?.status,
+        activity: activity || prev[memberId]?.activity,
+        lastActive: "Baru saja",
+      },
+    }));
+  };
+
   const t = translations[lang] || translations.id;
 
+  // Active online members count
+  const onlineMembersCount = Object.values(squadPresence).filter(p => p.isOnline).length;
+
   return (
-    <AppContext.Provider value={{ theme, setTheme, toggleTheme, lang, setLang, toggleLang, t }}>
+    <AppContext.Provider
+      value={{
+        theme,
+        setTheme,
+        toggleTheme,
+        lang,
+        setLang,
+        toggleLang,
+        t,
+        slotsCount,
+        setSlotsCount,
+        isSlotOpen,
+        setIsSlotOpen,
+        squadPresence,
+        updateMemberPresence,
+        onlineMembersCount,
+        isPresenceModalOpen,
+        setIsPresenceModalOpen,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );
