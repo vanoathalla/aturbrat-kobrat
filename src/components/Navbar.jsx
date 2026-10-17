@@ -1,82 +1,78 @@
-import React, { useState, useEffect } from 'react';
-import { Volume2, VolumeX, Menu, X, Terminal, Sparkles, MessageSquare } from 'lucide-react';
+import React, { useState } from 'react';
+import { NavLink, Link } from 'react-router-dom';
+import { Volume2, VolumeX, Menu, X, Terminal, MessageSquare, Sparkles } from 'lucide-react';
 import { ambientSynth } from '../utils/audioSynth';
 import { KOBRAT_DATA } from '../data/kobratData';
 
 export default function Navbar({ onOpenTerminal, onShowToast }) {
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const toggleAudio = () => {
     const playing = ambientSynth.toggle();
     setIsPlayingAudio(playing);
     if (playing) {
-      onShowToast?.("🎵 Lo-Fi Ambient Kobrat dinyalakan ~ Chill & enjoy the vibe!");
+      onShowToast?.("🎵 Lo-Fi Ambient Kobrat aktif ~ Chill & selamat menikmati!");
     } else {
       onShowToast?.("🔇 Lo-Fi Ambient dimatikan");
     }
   };
 
-  const navLinks = [
-    { label: "Layanan", href: "#layanan" },
-    { label: "Kalkulator", href: "#kalkulator" },
-    { label: "The Squad", href: "#squad" },
-    { label: "Portfolio", href: "#portfolio" },
-    { label: "FAQ", href: "#faq" },
+  const navItems = [
+    { label: "Beranda", path: "/" },
+    { label: "Layanan", path: "/services" },
+    { label: "Kalkulator", path: "/calculator" },
+    { label: "The Squad", path: "/squad" },
+    { label: "Portfolio", path: "/portfolio" },
+    { label: "FAQ", path: "/faq" },
   ];
 
   return (
-    <header className={`navbar-header ${isScrolled ? 'scrolled' : ''}`}>
-      <div className="container nav-container">
-        {/* Brand Logo */}
-        <a href="#" className="brand-logo">
-          <div className="logo-badge">
-            <span className="logo-icon">🐍</span>
+    <header className="ios-navbar-wrapper">
+      <div className="ios-dock-container">
+        {/* Brand Logo with red specular glow */}
+        <Link to="/" className="ios-brand">
+          <div className="ios-logo-squircle">
+            <span>🐍</span>
           </div>
-          <div className="brand-info">
-            <span className="brand-name">KOBRAT</span>
-            <span className="brand-sub">// dev_syndicate</span>
+          <div className="ios-brand-text">
+            <span className="brand-title">KOBRAT</span>
+            <span className="brand-dot"></span>
           </div>
-        </a>
+        </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="desktop-nav">
-          {navLinks.map((item, idx) => (
-            <a key={idx} href={item.href} className="nav-link">
+        {/* iOS Segmented Navigation Bar */}
+        <nav className="ios-segmented-control">
+          {navItems.map((item, idx) => (
+            <NavLink
+              key={idx}
+              to={item.path}
+              className={({ isActive }) =>
+                `ios-segment-item ${isActive ? 'active' : ''}`
+              }
+            >
               {item.label}
-            </a>
+            </NavLink>
           ))}
         </nav>
 
-        {/* Right Actions: Audio Toggle, Terminal Button & CTA */}
-        <div className="nav-actions">
-          {/* Ambient Lo-Fi Synthesizer Button */}
+        {/* Actions Deck: Audio toggle, CLI, WA */}
+        <div className="ios-actions-deck">
+          {/* Lo-Fi Synth Toggle */}
           <button
             onClick={toggleAudio}
-            className={`audio-toggle-btn ${isPlayingAudio ? 'active' : ''}`}
-            title={isPlayingAudio ? "Matikan musik lo-fi" : "Nyalakan musik lo-fi ambient tongkrongan"}
+            className={`ios-action-pill ${isPlayingAudio ? 'active' : ''}`}
+            title="Toggle Lo-Fi Vibe"
           >
             {isPlayingAudio ? (
               <>
-                <Volume2 size={16} className="audio-icon pulse" />
-                <span className="audio-label">Lo-Fi ON</span>
-                <span className="sound-wave">
-                  <i></i><i></i><i></i>
-                </span>
+                <Volume2 size={15} className="audio-icon pulse" />
+                <span className="action-label">Lo-Fi</span>
               </>
             ) : (
               <>
-                <VolumeX size={16} className="audio-icon" />
-                <span className="audio-label">Lo-Fi Ambience</span>
+                <VolumeX size={15} />
+                <span className="action-label">Lo-Fi</span>
               </>
             )}
           </button>
@@ -84,71 +80,64 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
           {/* Terminal Launcher */}
           <button
             onClick={onOpenTerminal}
-            className="terminal-nav-btn"
-            title="Buka Terminal Kobrat"
+            className="ios-action-pill terminal-btn"
+            title="Buka Terminal CLI (Ctrl+K)"
           >
-            <Terminal size={15} />
+            <Terminal size={14} />
             <span className="mono">CLI</span>
           </button>
 
-          {/* WhatsApp / Konsul CTA */}
+          {/* WhatsApp Direct */}
           <a
             href={`https://wa.me/${KOBRAT_DATA.brand.whatsappNumber}?text=Halo%20Kobrat!%20Mau%20konsultasi%20projek%20kodingan%20dong`}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-primary nav-cta"
+            className="ios-action-pill cta-btn"
           >
-            <MessageSquare size={16} />
-            <span>Gas Konsul</span>
+            <MessageSquare size={14} />
+            <span>Chat WA</span>
           </a>
 
-          {/* Mobile Menu Toggle Button */}
+          {/* Mobile Menu Button */}
           <button
-            className="mobile-toggle-btn"
+            className="ios-mobile-btn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle Menu"
+            aria-label="Toggle Navigation"
           >
-            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* iOS Style Mobile Sheet Menu */}
       {mobileMenuOpen && (
-        <div className="mobile-drawer">
-          <nav className="mobile-nav-list">
-            {navLinks.map((item, idx) => (
-              <a
+        <div className="ios-mobile-sheet">
+          <div className="sheet-handle"></div>
+          <div className="sheet-nav-list">
+            {navItems.map((item, idx) => (
+              <NavLink
                 key={idx}
-                href={item.href}
-                className="mobile-nav-item"
+                to={item.path}
+                className={({ isActive }) =>
+                  `sheet-nav-item ${isActive ? 'active' : ''}`
+                }
                 onClick={() => setMobileMenuOpen(false)}
               >
-                {item.label}
-              </a>
+                <span>{item.label}</span>
+                <span className="sheet-arrow">›</span>
+              </NavLink>
             ))}
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onOpenTerminal();
               }}
-              className="mobile-nav-item mono"
+              className="sheet-nav-item mono-item"
             >
-              <Terminal size={16} /> Buka Terminal KOBRAT
+              <span>⚡ Terminal KOBRAT CLI</span>
+              <span className="sheet-arrow">›</span>
             </button>
-            <div className="mobile-drawer-footer">
-              <a
-                href={`https://wa.me/${KOBRAT_DATA.brand.whatsappNumber}?text=Halo%20Kobrat!%20Mau%20konsultasi%20projek%20kodingan%20dong`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary mobile-cta"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <MessageSquare size={16} />
-                <span>Gas Konsul via WhatsApp</span>
-              </a>
-            </div>
-          </nav>
+          </div>
         </div>
       )}
     </header>

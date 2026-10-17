@@ -1,33 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Services from './components/Services';
-import PricingCalculator from './components/PricingCalculator';
-import Squad from './components/Squad';
-import Portfolio from './components/Portfolio';
-import Testimonials from './components/Testimonials';
-import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import Terminal from './components/Terminal';
 import Toast from './components/Toast';
+import ScrollToTop from './components/ScrollToTop';
+
+// Multi-Pages
+import Home from './pages/Home';
+import ServicesPage from './pages/ServicesPage';
+import CalculatorPage from './pages/CalculatorPage';
+import SquadPage from './pages/SquadPage';
+import PortfolioPage from './pages/PortfolioPage';
+import FAQPage from './pages/FAQPage';
 
 export default function App() {
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
-  const [selectedServiceId, setSelectedServiceId] = useState(null);
   const [toastMessage, setToastMessage] = useState('');
 
   const showToast = (msg) => {
     setToastMessage(msg);
-  };
-
-  const handleSelectService = (serviceId) => {
-    setSelectedServiceId(serviceId);
-    const element = document.getElementById('kalkulator');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-    showToast('⚡ Layanan dipilih! Estimasi otomatis diperbarui.');
   };
 
   // Keyboard shortcut Ctrl+K or Cmd+K to launch terminal
@@ -43,51 +36,42 @@ export default function App() {
   }, []);
 
   return (
-    <div className="kobrat-app">
-      {/* Navigation Bar */}
-      <Navbar
-        onOpenTerminal={() => setIsTerminalOpen(true)}
-        onShowToast={showToast}
-      />
+    <BrowserRouter>
+      <ScrollToTop />
+      <div className="kobrat-app">
+        {/* iOS Floating Island Navbar */}
+        <Navbar
+          onOpenTerminal={() => setIsTerminalOpen(true)}
+          onShowToast={showToast}
+        />
 
-      {/* Hero Header */}
-      <Hero onOpenTerminal={() => setIsTerminalOpen(true)} />
+        {/* Page Routing */}
+        <main className="main-content">
+          <Routes>
+            <Route path="/" element={<Home onOpenTerminal={() => setIsTerminalOpen(true)} />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/calculator" element={<CalculatorPage onShowToast={showToast} />} />
+            <Route path="/squad" element={<SquadPage />} />
+            <Route path="/portfolio" element={<PortfolioPage />} />
+            <Route path="/faq" element={<FAQPage />} />
+          </Routes>
+        </main>
 
-      {/* Services Grid */}
-      <Services onSelectService={handleSelectService} />
+        {/* Footer */}
+        <Footer onShowToast={showToast} />
 
-      {/* Interactive Pricing Estimator */}
-      <PricingCalculator
-        selectedServiceId={selectedServiceId}
-        onShowToast={showToast}
-      />
+        {/* Interactive CLI Terminal Modal */}
+        <Terminal
+          isOpen={isTerminalOpen}
+          onClose={() => setIsTerminalOpen(false)}
+        />
 
-      {/* The Circle Squad */}
-      <Squad />
-
-      {/* Portfolio Showcase */}
-      <Portfolio />
-
-      {/* Testimonials */}
-      <Testimonials />
-
-      {/* Frequently Asked Questions */}
-      <FAQ />
-
-      {/* Footer */}
-      <Footer onShowToast={showToast} />
-
-      {/* Interactive CLI Terminal Modal */}
-      <Terminal
-        isOpen={isTerminalOpen}
-        onClose={() => setIsTerminalOpen(false)}
-      />
-
-      {/* Global Toast Alerts */}
-      <Toast
-        message={toastMessage}
-        onClose={() => setToastMessage('')}
-      />
-    </div>
+        {/* Global Toast Alerts */}
+        <Toast
+          message={toastMessage}
+          onClose={() => setToastMessage('')}
+        />
+      </div>
+    </BrowserRouter>
   );
 }
