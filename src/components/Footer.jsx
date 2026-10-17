@@ -122,9 +122,6 @@ export default function Footer({ onShowToast }) {
           <div className="footer-badges">
             <span className="mono status-tag">{t.footer.hosted}</span>
             <span className="mono status-tag">{t.footer.zeroDrama}</span>
-            <a href="/admin" className="mono status-tag admin-portal-link" title="Squad Member Login">
-              🔒 Member Portal
-            </a>
           </div>
         </div>
       </div>
