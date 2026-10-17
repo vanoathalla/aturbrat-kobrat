@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg_jambi" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9f1239"/>
+      <stop offset="100%" stop-color="#2a0510"/>
+    </linearGradient>
+    <linearGradient id="skin_jambi" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fed7aa"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="40" fill="url(#bg_jambi)"/>
+  <circle cx="100" cy="85" r="55" fill="#e11d48" opacity="0.25"/>
+  <path d="M40 185 C40 145, 60 135, 100 135 C140 135, 160 145, 160 185 Z" fill="#180710"/>
+  <!-- Beanie / Cap -->
+  <path d="M64 72 C64 42, 136 42, 136 72 Z" fill="#e11d48"/>
+  <rect x="60" y="68" width="80" height="10" rx="4" fill="#be123c"/>
+  <rect x="90" y="115" width="20" height="25" fill="#ea580c" rx="5"/>
+  <ellipse cx="100" cy="90" rx="34" ry="38" fill="url(#skin_jambi)"/>
+  <circle cx="86" cy="90" r="3.5" fill="#180710"/>
+  <circle cx="114" cy="90" r="3.5" fill="#180710"/>
+  <path d="M92 108 Q100 114 108 108" stroke="#881337" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <rect x="38" y="158" width="124" height="24" rx="12" fill="#e11d48"/>
+  <text x="100" y="174" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="11" text-anchor="middle" letter-spacing="0.5">MAS JAMBI</text>
+</svg>

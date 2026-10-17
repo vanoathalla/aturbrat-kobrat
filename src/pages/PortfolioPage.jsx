@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { Layers, ExternalLink, Code, CheckCircle } from 'lucide-react';
+import { Layers, CheckCircle } from 'lucide-react';
 import { KOBRAT_DATA } from '../data/kobratData';
+import { useApp } from '../context/AppContext';
 
 export default function PortfolioPage() {
+  const { t } = useApp();
   const [activeFilter, setActiveFilter] = useState('all');
 
   const filterOptions = [
-    { id: 'all', label: 'Semua Projek' },
-    { id: 'web', label: 'Web & Fullstack' },
-    { id: 'academic', label: 'Tugas & Skripsi' },
-    { id: 'bot', label: 'Bot & Otomasi' },
-    { id: 'uiux', label: 'UI/UX Design' },
+    { id: 'all', label: t.portfolio.filterAll },
+    { id: 'web', label: t.portfolio.filterWeb },
+    { id: 'academic', label: t.portfolio.filterAcademic },
+    { id: 'bot', label: t.portfolio.filterBot },
+    { id: 'uiux', label: t.portfolio.filterUiux },
   ];
 
   const filteredProjects = activeFilter === 'all'
@@ -24,13 +26,13 @@ export default function PortfolioPage() {
         <div className="section-header-center">
           <div className="section-tag">
             <Layers size={14} />
-            <span>PORTFOLIO & KARYA</span>
+            <span>{t.portfolio.tag}</span>
           </div>
           <h1 className="section-title">
-            Track Record <span className="gradient-text">Yang Pernah Dilibas</span>
+            {t.portfolio.title}<span className="gradient-text">{t.portfolio.titleHighlight}</span>
           </h1>
           <p className="section-desc">
-            Cuplikan hasil pengerjaan projek nyata dari klien UMKM, komunitas, tugas praktikum, hingga skripsi yang lolos sidang dengan nilai maksimal.
+            {t.portfolio.desc}
           </p>
         </div>
 

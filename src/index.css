@@ -1,18 +1,10 @@
 /* ============================================================
-   KOBRAT DESIGN SYSTEM // iOS Liquid Glass x Crimson Kopdes Red
+   KOBRAT DESIGN SYSTEM // Syne Typography, iOS Glass & Kopdes Red
+   Support: Dark Mode & Light Mode (Bilingual)
    ============================================================ */
 
 :root {
-  /* Color Palette - Obsidian Dark with Kopdes Crimson & Ruby Red */
-  --bg-primary: #080406;
-  --bg-secondary: #0e070a;
-  --bg-tertiary: #170c12;
-  --bg-card: rgba(24, 13, 19, 0.65);
-  --bg-card-hover: rgba(36, 18, 28, 0.85);
-  --bg-glass: rgba(18, 9, 14, 0.72);
-  --bg-dock: rgba(14, 8, 12, 0.82);
-
-  /* Primary Accent: Kopdes Crimson Red / Ruby Flame */
+  /* Common Accents */
   --accent-red: #e11d48;
   --accent-red-bright: #f43f5e;
   --accent-red-deep: #be123c;
@@ -20,25 +12,12 @@
   --accent-red-subtle: rgba(225, 29, 72, 0.12);
   --accent-red-border: rgba(225, 29, 72, 0.3);
 
-  /* Secondary Accents */
   --accent-amber: #fbbf24;
   --accent-emerald: #10b981;
   --accent-purple: #a855f7;
 
-  /* Text Colors */
-  --text-main: #f8fafc;
-  --text-muted: #9ca3af;
-  --text-dark: #64748b;
-  --text-red: #fb7185;
-
-  /* iOS Frosted Borders & Dividers */
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-medium: rgba(255, 255, 255, 0.14);
-  --border-active: rgba(225, 29, 72, 0.5);
-  --border-glass: rgba(255, 255, 255, 0.12);
-
-  /* Typography */
-  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Typography: Syne (Ultra Punchy Gen-Z Headline) + Plus Jakarta Sans + JetBrains */
+  --font-display: 'Syne', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace, Consolas;
 
@@ -49,11 +28,64 @@
   --radius-lg: 24px;
   --radius-xl: 32px;
   --radius-full: 9999px;
+}
 
-  /* iOS Depth Shadows */
+/* ============================================================
+   DARK THEME (Default)
+   ============================================================ */
+:root, [data-theme="dark"] {
+  --bg-primary: #080406;
+  --bg-secondary: #0e070a;
+  --bg-tertiary: #170c12;
+  --bg-card: rgba(24, 13, 19, 0.65);
+  --bg-card-hover: rgba(36, 18, 28, 0.85);
+  --bg-glass: rgba(18, 9, 14, 0.72);
+  --bg-dock: rgba(14, 8, 12, 0.86);
+
+  --text-main: #f8fafc;
+  --text-muted: #9ca3af;
+  --text-dark: #64748b;
+  --text-red: #fb7185;
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.14);
+  --border-active: rgba(225, 29, 72, 0.5);
+  --border-glass: rgba(255, 255, 255, 0.12);
+
   --shadow-dock: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 1px rgba(255, 255, 255, 0.2);
   --shadow-card: 0 16px 36px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   --shadow-red-glow: 0 8px 30px rgba(225, 29, 72, 0.4);
+
+  color-scheme: dark;
+}
+
+/* ============================================================
+   LIGHT THEME (Apple Clean Porcelain with Kopdes Crimson)
+   ============================================================ */
+[data-theme="light"] {
+  --bg-primary: #faf6f7;
+  --bg-secondary: #f4ecf0;
+  --bg-tertiary: #ede1e7;
+  --bg-card: rgba(255, 255, 255, 0.8);
+  --bg-card-hover: rgba(255, 255, 255, 0.95);
+  --bg-glass: rgba(255, 255, 255, 0.82);
+  --bg-dock: rgba(255, 255, 255, 0.88);
+
+  --text-main: #1c0b14;
+  --text-muted: #5e4854;
+  --text-dark: #8c7381;
+  --text-red: #e11d48;
+
+  --border-subtle: rgba(0, 0, 0, 0.06);
+  --border-medium: rgba(0, 0, 0, 0.12);
+  --border-active: rgba(225, 29, 72, 0.6);
+  --border-glass: rgba(255, 255, 255, 0.9);
+
+  --shadow-dock: 0 10px 40px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 12px 30px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 1);
+  --shadow-red-glow: 0 8px 25px rgba(225, 29, 72, 0.25);
+
+  color-scheme: light;
 }
 
 /* Base Reset & Global Styles */
@@ -66,7 +98,6 @@
 
 html {
   scroll-behavior: smooth;
-  color-scheme: dark;
 }
 
 body {
@@ -75,6 +106,12 @@ body {
   color: var(--text-main);
   line-height: 1.6;
   overflow-x: hidden;
+  min-height: 100vh;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Subtle Dynamic Ambient Background */
+[data-theme="dark"] body {
   background-image: 
     radial-gradient(circle at 50% 0%, rgba(225, 29, 72, 0.16) 0%, transparent 45%),
     radial-gradient(circle at 85% 35%, rgba(190, 18, 60, 0.1) 0%, transparent 40%),
@@ -83,7 +120,16 @@ body {
     linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
   background-size: 100% 100%, 100% 100%, 100% 100%, 54px 54px, 54px 54px;
   background-attachment: fixed;
-  min-height: 100vh;
+}
+
+[data-theme="light"] body {
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(225, 29, 72, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 90% 40%, rgba(244, 63, 94, 0.06) 0%, transparent 40%),
+    linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+  background-attachment: fixed;
 }
 
 /* Custom Scrollbar */
@@ -94,7 +140,7 @@ body {
   background: var(--bg-primary);
 }
 ::-webkit-scrollbar-thumb {
-  background: #24141d;
+  background: var(--border-medium);
   border-radius: var(--radius-full);
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -104,10 +150,10 @@ body {
 /* Typography Helpers */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.025em;
-  color: #ffffff;
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  color: var(--text-main);
 }
 
 p {
@@ -171,6 +217,7 @@ button {
   color: var(--text-red);
   border: 1px solid var(--accent-red-border);
   margin-bottom: 1.2rem;
+  font-weight: 700;
 }
 
 .section-title {
@@ -188,8 +235,8 @@ button {
 /* iOS Glassmorphism Panels */
 .glass-panel {
   background: var(--bg-card);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
   border: 1px solid var(--border-glass);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
@@ -199,7 +246,11 @@ button {
 .glass-panel:hover {
   border-color: rgba(225, 29, 72, 0.4);
   transform: translateY(-3px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(225, 29, 72, 0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 0 25px rgba(225, 29, 72, 0.15);
+}
+
+[data-theme="dark"] .glass-panel:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(225, 29, 72, 0.2);
 }
 
 /* iOS Buttons */
@@ -218,12 +269,13 @@ button {
   box-shadow: var(--shadow-red-glow);
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px) scale(1.02);
   box-shadow: 0 10px 35px rgba(225, 29, 72, 0.55);
+  color: #fff;
 }
 
 .btn-primary:active {
@@ -235,7 +287,7 @@ button {
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-card);
   color: var(--text-main);
   font-weight: 600;
   font-size: 0.95rem;
@@ -247,8 +299,8 @@ button {
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: var(--bg-card-hover);
+  border-color: rgba(225, 29, 72, 0.4);
   transform: translateY(-2px);
 }
 
@@ -268,6 +320,7 @@ button {
   border: 1px solid rgba(225, 29, 72, 0.35);
   border-radius: var(--radius-full);
   color: var(--text-red);
+  font-weight: 600;
 }
 
 .ping-dot {
@@ -298,8 +351,14 @@ button {
 }
 
 /* Gradient Text */
-.gradient-text {
-  background: linear-gradient(135deg, #ffffff 20%, #fb7185 65%, #e11d48 100%);
+[data-theme="dark"] .gradient-text {
+  background: linear-gradient(135deg, #ffffff 15%, #fb7185 65%, #e11d48 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="light"] .gradient-text {
+  background: linear-gradient(135deg, #1c0b14 15%, #e11d48 70%, #be123c 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

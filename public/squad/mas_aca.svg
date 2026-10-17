@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg_aca" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#be123c"/>
+      <stop offset="100%" stop-color="#4c0519"/>
+    </linearGradient>
+    <linearGradient id="skin_aca" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fcd34d"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="40" fill="url(#bg_aca)"/>
+  <!-- Circle glow -->
+  <circle cx="100" cy="85" r="55" fill="#e11d48" opacity="0.3"/>
+  <!-- Body/Hoodie -->
+  <path d="M40 185 C40 145, 60 135, 100 135 C140 135, 160 145, 160 185 Z" fill="#180a11"/>
+  <path d="M70 140 L100 175 L130 140 Z" fill="#e11d48" opacity="0.6"/>
+  <!-- Head & Neck -->
+  <rect x="90" y="115" width="20" height="25" fill="#f59e0b" rx="5"/>
+  <ellipse cx="100" cy="85" rx="34" ry="40" fill="url(#skin_aca)"/>
+  <!-- Modern Stylish Hair -->
+  <path d="M66 82 C65 52, 90 40, 115 42 C135 44, 142 62, 134 78 C128 72, 115 62, 95 65 C80 67, 72 75, 66 82 Z" fill="#0f070b"/>
+  <!-- Glasses / Dev Specs -->
+  <rect x="76" y="78" width="20" height="15" rx="4" fill="none" stroke="#ffffff" stroke-width="2.5"/>
+  <rect x="104" y="78" width="20" height="15" rx="4" fill="none" stroke="#ffffff" stroke-width="2.5"/>
+  <line x1="96" y1="85" x2="104" y2="85" stroke="#ffffff" stroke-width="2.5"/>
+  <!-- Eyes -->
+  <circle cx="86" cy="85" r="3" fill="#0f070b"/>
+  <circle cx="114" cy="85" r="3" fill="#0f070b"/>
+  <!-- Confident Smile -->
+  <path d="M92 104 Q100 110 108 104" stroke="#881337" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Nickname Badge -->
+  <rect x="45" y="158" width="110" height="24" rx="12" fill="#e11d48"/>
+  <text x="100" y="174" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="11" text-anchor="middle" letter-spacing="0.5">MAS ACA</text>
+</svg>

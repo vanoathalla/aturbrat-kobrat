@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg_vano" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f43f5e"/>
+      <stop offset="100%" stop-color="#881337"/>
+    </linearGradient>
+    <linearGradient id="skin_vano" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="40" fill="url(#bg_vano)"/>
+  <circle cx="100" cy="85" r="55" fill="#f43f5e" opacity="0.3"/>
+  <path d="M40 185 C40 145, 60 135, 100 135 C140 135, 160 145, 160 185 Z" fill="#24101a"/>
+  <rect x="90" y="115" width="20" height="25" fill="#d97706" rx="5"/>
+  <ellipse cx="100" cy="85" rx="34" ry="40" fill="url(#skin_vano)"/>
+  <!-- Designer Side-swept Trendy Hair -->
+  <path d="M62 76 C62 48, 86 36, 115 36 C138 36, 142 54, 136 78 C124 64, 106 60, 88 64 C76 66, 68 70, 62 76 Z" fill="#180710"/>
+  <circle cx="86" cy="85" r="3.5" fill="#180710"/>
+  <circle cx="114" cy="85" r="3.5" fill="#180710"/>
+  <!-- Designer smirking smile -->
+  <path d="M93 103 Q102 110 109 104" stroke="#881337" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <rect x="42" y="158" width="116" height="24" rx="12" fill="#be123c"/>
+  <text x="100" y="174" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="11" text-anchor="middle" letter-spacing="0.5">MAS VANO</text>
+</svg>

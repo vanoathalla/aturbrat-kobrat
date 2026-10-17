@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { Volume2, VolumeX, Menu, X, Terminal, MessageSquare, Sparkles } from 'lucide-react';
+import { Volume2, VolumeX, Menu, X, Terminal, MessageSquare, Sun, Moon, Globe } from 'lucide-react';
 import { ambientSynth } from '../utils/audioSynth';
 import { KOBRAT_DATA } from '../data/kobratData';
+import { useApp } from '../context/AppContext';
 
 export default function Navbar({ onOpenTerminal, onShowToast }) {
+  const { theme, toggleTheme, lang, toggleLang, t } = useApp();
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -12,19 +14,19 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
     const playing = ambientSynth.toggle();
     setIsPlayingAudio(playing);
     if (playing) {
-      onShowToast?.("🎵 Lo-Fi Ambient Kobrat aktif ~ Chill & selamat menikmati!");
+      onShowToast?.(lang === 'id' ? "🎵 Lo-Fi Ambient Kobrat aktif ~ Selamat menikmati!" : "🎵 Lo-Fi Ambient Active ~ Enjoy the vibe!");
     } else {
-      onShowToast?.("🔇 Lo-Fi Ambient dimatikan");
+      onShowToast?.(lang === 'id' ? "🔇 Lo-Fi Ambient dimatikan" : "🔇 Lo-Fi Ambient turned off");
     }
   };
 
   const navItems = [
-    { label: "Beranda", path: "/" },
-    { label: "Layanan", path: "/services" },
-    { label: "Kalkulator", path: "/calculator" },
-    { label: "The Squad", path: "/squad" },
-    { label: "Portfolio", path: "/portfolio" },
-    { label: "FAQ", path: "/faq" },
+    { label: t.nav.home, path: "/" },
+    { label: t.nav.services, path: "/services" },
+    { label: t.nav.calculator, path: "/calculator" },
+    { label: t.nav.squad, path: "/squad" },
+    { label: t.nav.portfolio, path: "/portfolio" },
+    { label: t.nav.faq, path: "/faq" },
   ];
 
   return (
@@ -56,8 +58,33 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
           ))}
         </nav>
 
-        {/* Actions Deck: Audio toggle, CLI, WA */}
+        {/* Actions Deck: Audio toggle, Theme Toggle, Language Toggle, CLI, WA */}
         <div className="ios-actions-deck">
+          {/* Language Toggle Button (ID / EN) */}
+          <button
+            onClick={() => {
+              toggleLang();
+              onShowToast?.(lang === 'id' ? "🌐 Language switched to English" : "🌐 Bahasa diubah ke Indonesia");
+            }}
+            className="ios-action-pill lang-btn"
+            title={lang === 'id' ? "Ganti ke Bahasa Inggris" : "Switch to Indonesian"}
+          >
+            <Globe size={14} />
+            <span className="mono">{lang.toUpperCase()}</span>
+          </button>
+
+          {/* Theme Toggle Button (Dark / Light) */}
+          <button
+            onClick={() => {
+              toggleTheme();
+              onShowToast?.(theme === 'dark' ? "☀️ Light Mode diaktifkan" : "🌙 Dark Mode diaktifkan");
+            }}
+            className="ios-action-pill theme-btn"
+            title={theme === 'dark' ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          >
+            {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+          </button>
+
           {/* Lo-Fi Synth Toggle */}
           <button
             onClick={toggleAudio}
@@ -67,12 +94,12 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
             {isPlayingAudio ? (
               <>
                 <Volume2 size={15} className="audio-icon pulse" />
-                <span className="action-label">Lo-Fi</span>
+                <span className="action-label">{t.nav.lofiOn}</span>
               </>
             ) : (
               <>
                 <VolumeX size={15} />
-                <span className="action-label">Lo-Fi</span>
+                <span className="action-label">{t.nav.lofiOff}</span>
               </>
             )}
           </button>
@@ -95,7 +122,7 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
             className="ios-action-pill cta-btn"
           >
             <MessageSquare size={14} />
-            <span>Chat WA</span>
+            <span>{t.nav.chatWA}</span>
           </a>
 
           {/* Mobile Menu Button */}
@@ -127,6 +154,31 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
                 <span className="sheet-arrow">›</span>
               </NavLink>
             ))}
+            
+            {/* Mobile Language and Theme Row */}
+            <div className="sheet-actions-row">
+              <button
+                onClick={() => {
+                  toggleLang();
+                  onShowToast?.(lang === 'id' ? "🌐 Language switched to English" : "🌐 Bahasa diubah ke Indonesia");
+                }}
+                className="sheet-action-pill"
+              >
+                <Globe size={15} />
+                <span>{lang === 'id' ? "Bahasa: ID (Ganti ke EN)" : "Language: EN (Switch to ID)"}</span>
+              </button>
+              <button
+                onClick={() => {
+                  toggleTheme();
+                  onShowToast?.(theme === 'dark' ? "☀️ Light Mode" : "🌙 Dark Mode");
+                }}
+                className="sheet-action-pill"
+              >
+                {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+                <span>{theme === 'dark' ? "Mode Terang" : "Mode Gelap"}</span>
+              </button>
+            </div>
+
             <button
               onClick={() => {
                 setMobileMenuOpen(false);

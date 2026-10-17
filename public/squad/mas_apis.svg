@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg_apis" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#be123c"/>
+      <stop offset="100%" stop-color="#4c0519"/>
+    </linearGradient>
+    <linearGradient id="skin_apis" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="40" fill="url(#bg_apis)"/>
+  <circle cx="100" cy="85" r="55" fill="#f43f5e" opacity="0.3"/>
+  <path d="M40 185 C40 145, 60 135, 100 135 C140 135, 160 145, 160 185 Z" fill="#14060d"/>
+  <rect x="90" y="115" width="20" height="25" fill="#f59e0b" rx="5"/>
+  <ellipse cx="100" cy="85" rx="34" ry="40" fill="url(#skin_apis)"/>
+  <!-- Short Fade Haircut -->
+  <path d="M66 75 C66 48, 86 36, 100 36 C114 36, 134 48, 134 75 C126 66, 114 62, 100 62 C86 62, 74 66, 66 75 Z" fill="#0f0509"/>
+  <circle cx="86" cy="85" r="3.5" fill="#180710"/>
+  <circle cx="114" cy="85" r="3.5" fill="#180710"/>
+  <path d="M92 104 Q100 110 108 104" stroke="#881337" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <rect x="42" y="158" width="116" height="24" rx="12" fill="#e11d48"/>
+  <text x="100" y="174" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="11" text-anchor="middle" letter-spacing="0.5">MAS APIS</text>
+</svg>

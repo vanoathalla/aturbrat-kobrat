@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { 
   Calculator, Check, MessageSquare, Copy, Sparkles, 
-  Clock, ShieldAlert, ArrowRight, RotateCcw 
+  Clock, ShieldAlert, ArrowRight 
 } from 'lucide-react';
 import { KOBRAT_DATA } from '../data/kobratData';
+import { useApp } from '../context/AppContext';
 
 export default function CalculatorPage({ onShowToast }) {
+  const { t, lang } = useApp();
   const [searchParams] = useSearchParams();
   const serviceParam = searchParams.get('service');
   const calcData = KOBRAT_DATA.calculatorData;
@@ -53,7 +55,11 @@ export default function CalculatorPage({ onShowToast }) {
   const baseCalculated = projectObj.basePrice * urgencyObj.multiplier;
   const grandTotal = Math.round((baseCalculated + addonsTotal) / 1000) * 1000;
   
-  const formatRupiah = (val) => {
+  const formatCurrency = (val) => {
+    if (lang === 'en') {
+      const approxUSD = Math.round(val / 16000);
+      return `~ $${approxUSD} (Rp ${new Intl.NumberFormat('id-ID').format(val)})`;
+    }
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
       currency: 'IDR',
@@ -74,7 +80,7 @@ export default function CalculatorPage({ onShowToast }) {
       `📌 *Jenis Projek*: ${projectObj.label}\n` +
       `⏱️ *Deadline*: ${urgencyObj.label} (Est. ${estimatedDays} hari)\n` +
       (selectedAddons.length > 0 ? `📦 *Add-ons*:\n${addonLabels}\n` : '') +
-      `💰 *Estimasi Biaya*: ${formatRupiah(grandTotal)}\n` +
+      `💰 *Estimasi Biaya*: Rp ${new Intl.NumberFormat('id-ID').format(grandTotal)}\n` +
       (notes.trim() ? `📝 *Catatan Tambahan*: ${notes}\n\n` : '\n') +
       `Apakah slot pengerjaan masih tersedia? Terima kasih!`;
 
@@ -84,7 +90,7 @@ export default function CalculatorPage({ onShowToast }) {
   const handleCopyOrder = () => {
     const text = generateWhatsAppMessage();
     navigator.clipboard.writeText(text);
-    onShowToast?.("📋 Rincian pesanan disalin! Silakan kirim langsung ke WhatsApp.");
+    onShowToast?.(lang === 'id' ? "📋 Rincian pesanan disalin!" : "📋 Order draft copied to clipboard!");
   };
 
   const handleWhatsAppRedirect = () => {
@@ -100,13 +106,13 @@ export default function CalculatorPage({ onShowToast }) {
         <div className="section-header-center">
           <div className="section-tag">
             <Sparkles size={14} />
-            <span>TRANSPARANSI BIAYA</span>
+            <span>{t.calc.tag}</span>
           </div>
           <h1 className="section-title">
-            Kalkulator Estimasi Biaya <span className="gradient-text">Anti Boncos</span>
+            {t.calc.title}<span className="gradient-text">{t.calc.titleHighlight}</span>
           </h1>
           <p className="section-desc">
-            Sesuaikan dengan kebutuhan dan deadline-mu. Dapatkan estimasi biaya yang jelas, transparan, dan langsung terhubung ke WhatsApp tim Kobrat.
+            {t.calc.desc}
           </p>
         </div>
 
@@ -117,7 +123,7 @@ export default function CalculatorPage({ onShowToast }) {
             <div className="calc-group">
               <label className="calc-group-label">
                 <span className="step-num">1</span>
-                <span>Pilih Jenis Projek:</span>
+                <span>{t.calc.step1}</span>
               </label>
               <div className="calc-grid-options">
                 {calcData.projectTypes.map((type) => (
@@ -131,7 +137,7 @@ export default function CalculatorPage({ onShowToast }) {
                       <span className="option-title">{type.label}</span>
                       {selectedType === type.id && <Check size={16} className="check-icon" />}
                     </div>
-                    <span className="option-price mono">Mulai {formatRupiah(type.basePrice)}</span>
+                    <span className="option-price mono">{formatCurrency(type.basePrice)}</span>
                   </button>
                 ))}
               </div>
@@ -141,7 +147,7 @@ export default function CalculatorPage({ onShowToast }) {
             <div className="calc-group">
               <label className="calc-group-label">
                 <span className="step-num">2</span>
-                <span>Pilih Tenggat Waktu (Deadline):</span>
+                <span>{t.calc.step2}</span>
               </label>
               <div className="calc-grid-urgency">
                 {calcData.urgencyOptions.map((urgency) => (
@@ -162,7 +168,7 @@ export default function CalculatorPage({ onShowToast }) {
             <div className="calc-group">
               <label className="calc-group-label">
                 <span className="step-num">3</span>
-                <span>Layanan Tambahan (Opsional):</span>
+                <span>{t.calc.step3}</span>
               </label>
               <div className="calc-addons-list">
                 {calcData.addons.map((addon) => {
@@ -177,7 +183,7 @@ export default function CalculatorPage({ onShowToast }) {
                         {isChecked && <Check size={14} />}
                       </div>
                       <span className="addon-title">{addon.label}</span>
-                      <span className="addon-price mono">+{formatRupiah(addon.price)}</span>
+                      <span className="addon-price mono">+{formatCurrency(addon.price)}</span>
                     </div>
                   );
                 })}
@@ -188,12 +194,12 @@ export default function CalculatorPage({ onShowToast }) {
             <div className="calc-group">
               <label className="calc-group-label">
                 <span className="step-num">4</span>
-                <span>Ceritakan Brief / Deadline Spesifikmu (Opsional):</span>
+                <span>{t.calc.step4}</span>
               </label>
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="Contoh: 'Tugas kuliah machine learning python, deadline lusa jam 10 pagi...'"
+                placeholder={t.calc.placeholder}
                 rows={3}
                 className="calc-textarea"
               />
@@ -207,36 +213,36 @@ export default function CalculatorPage({ onShowToast }) {
               <span>LIVE ESTIMATOR</span>
             </div>
 
-            <h2 className="summary-title">Ringkasan Pesanan</h2>
+            <h2 className="summary-title">{t.calc.summaryTitle}</h2>
 
             <div className="summary-details">
               <div className="detail-row">
-                <span className="detail-label">Jenis Projek:</span>
+                <span className="detail-label">{t.calc.projectType}</span>
                 <span className="detail-value">{projectObj.label}</span>
               </div>
               <div className="detail-row">
-                <span className="detail-label">Tingkat Urgensi:</span>
+                <span className="detail-label">{t.calc.urgency}</span>
                 <span className="detail-value">{urgencyObj.label}</span>
               </div>
               <div className="detail-row">
-                <span className="detail-label">Estimasi Waktu:</span>
-                <span className="detail-value highlight">~ {estimatedDays} Hari</span>
+                <span className="detail-label">{t.calc.estTime}</span>
+                <span className="detail-value highlight">~ {estimatedDays} {lang === 'id' ? 'Hari' : 'Days'}</span>
               </div>
               <div className="detail-row">
-                <span className="detail-label">Add-ons:</span>
-                <span className="detail-value">{selectedAddons.length} terpilih</span>
+                <span className="detail-label">{t.calc.addonsSelected}</span>
+                <span className="detail-value">{selectedAddons.length}</span>
               </div>
             </div>
 
             <div className="summary-divider"></div>
 
             <div className="summary-total-box">
-              <span className="total-label">Estimasi Total Biaya:</span>
+              <span className="total-label">{t.calc.estTotal}</span>
               <div className="total-amount mono gradient-text">
-                {formatRupiah(grandTotal)}
+                {formatCurrency(grandTotal)}
               </div>
               <span className="total-sub">
-                *Bisa DP 30% santai. Pelunasan setelah melihat hasil demo.
+                {t.calc.dpNote}
               </span>
             </div>
 
@@ -246,7 +252,7 @@ export default function CalculatorPage({ onShowToast }) {
                 className="btn-primary summary-wa-btn"
               >
                 <MessageSquare size={18} />
-                <span>Kunci Slot via WhatsApp</span>
+                <span>{t.calc.btnLockWA}</span>
                 <ArrowRight size={16} />
               </button>
 
@@ -255,13 +261,13 @@ export default function CalculatorPage({ onShowToast }) {
                 className="btn-secondary summary-copy-btn"
               >
                 <Copy size={16} />
-                <span>Salin Format Pesanan</span>
+                <span>{t.calc.btnCopy}</span>
               </button>
             </div>
 
             <div className="summary-guarantee">
               <ShieldAlert size={16} className="guar-icon" />
-              <span>Garansi 100% uang kembali jika hasil melenceng dari kesepakatan brief awal.</span>
+              <span>{t.calc.guarantee}</span>
             </div>
           </div>
         </div>

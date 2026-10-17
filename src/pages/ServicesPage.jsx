@@ -5,6 +5,7 @@ import {
   CheckCircle2, ArrowRight, Clock, Tag 
 } from 'lucide-react';
 import { KOBRAT_DATA } from '../data/kobratData';
+import { useApp } from '../context/AppContext';
 
 const iconMap = {
   Globe,
@@ -16,6 +17,7 @@ const iconMap = {
 };
 
 export default function ServicesPage() {
+  const { t } = useApp();
   const navigate = useNavigate();
 
   const handleChooseService = (serviceId) => {
@@ -28,13 +30,13 @@ export default function ServicesPage() {
         {/* Page Header */}
         <div className="section-header-center">
           <div className="section-tag">
-            <span>🛠️ KATALOG JASA KOBRAT</span>
+            <span>{t.services.tag}</span>
           </div>
           <h1 className="section-title">
-            Bisa Garap Apa Aja? <span className="gradient-text">Hampir Semuanya.</span>
+            {t.services.title}<span className="gradient-text">{t.services.titleHighlight}</span>
           </h1>
           <p className="section-desc">
-            Dari tugas praktikum semester 1 sampai arsitektur sistem skala penuh. Kodingan clean, terstruktur, siap pakai, bergaransi, dan bebas pusing.
+            {t.services.desc}
           </p>
         </div>
 
@@ -74,14 +76,14 @@ export default function ServicesPage() {
                   <div className="meta-item">
                     <Tag size={15} className="meta-icon" />
                     <div>
-                      <span className="meta-label">Mulai Dari</span>
+                      <span className="meta-label">{t.services.startingFrom}</span>
                       <span className="meta-value highlight">{item.startingPrice}</span>
                     </div>
                   </div>
                   <div className="meta-item">
                     <Clock size={15} className="meta-icon" />
                     <div>
-                      <span className="meta-label">Estimasi Pengerjaan</span>
+                      <span className="meta-label">{t.services.duration}</span>
                       <span className="meta-value">{item.turnaround}</span>
                     </div>
                   </div>
@@ -102,7 +104,7 @@ export default function ServicesPage() {
                   onClick={() => handleChooseService(item.id)}
                   className="btn-primary service-action-btn"
                 >
-                  <span>Pilih & Hitung Biaya</span>
+                  <span>{t.services.btnChoose}</span>
                   <ArrowRight size={16} />
                 </button>
               </div>

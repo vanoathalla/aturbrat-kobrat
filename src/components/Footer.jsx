@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Coffee, MessageSquare, Heart, Sparkles, Send } from 'lucide-react';
 import { GithubIcon } from './Icons';
 import { KOBRAT_DATA } from '../data/kobratData';
+import { useApp } from '../context/AppContext';
 
 export default function Footer({ onShowToast }) {
+  const { t, lang } = useApp();
   const [coffeeCount, setCoffeeCount] = useState(42);
 
   useEffect(() => {
@@ -17,7 +19,10 @@ export default function Footer({ onShowToast }) {
     const next = coffeeCount + 1;
     setCoffeeCount(next);
     localStorage.setItem('kobrat_coffee', next.toString());
-    onShowToast?.("☕ Makasih traktiran kopinya bro! Tim dev Kobrat makin melek ngoding 🚀");
+    onShowToast?.(lang === 'id' 
+      ? "☕ Makasih traktiran kopinya bro! Tim dev Kobrat makin melek ngoding 🚀" 
+      : "☕ Thanks for the coffee fuel! Kobrat devs are fully energized 🚀"
+    );
   };
 
   return (
@@ -37,7 +42,7 @@ export default function Footer({ onShowToast }) {
               </div>
             </div>
             <p className="footer-about">
-              Bukan cuma circle tongkrongan biasa. Kami kolektif developer, desainer, dan pemecah masalah kodingan yang siap bikin ide atau tugasmu kelar tanpa drama.
+              {t.footer.about}
             </p>
             <div className="footer-socials">
               <a 
@@ -72,50 +77,51 @@ export default function Footer({ onShowToast }) {
 
           {/* Nav Links */}
           <div className="footer-col">
-            <h4 className="footer-col-title">Navigasi</h4>
+            <h4 className="footer-col-title">{t.footer.navTitle}</h4>
             <ul className="footer-links">
-              <li><a href="#layanan">Layanan & Jasa</a></li>
-              <li><a href="#kalkulator">Kalkulator Biaya</a></li>
-              <li><a href="#squad">Squad Kobrat</a></li>
-              <li><a href="#portfolio">Track Record</a></li>
-              <li><a href="#faq">FAQ</a></li>
+              <li><a href="/">{t.nav.home}</a></li>
+              <li><a href="/services">{t.nav.services}</a></li>
+              <li><a href="/calculator">{t.nav.calculator}</a></li>
+              <li><a href="/squad">{t.nav.squad}</a></li>
+              <li><a href="/portfolio">{t.nav.portfolio}</a></li>
+              <li><a href="/faq">{t.nav.faq}</a></li>
             </ul>
           </div>
 
           {/* Services List */}
           <div className="footer-col">
-            <h4 className="footer-col-title">Layanan Utama</h4>
+            <h4 className="footer-col-title">{t.footer.svcTitle}</h4>
             <ul className="footer-links">
-              <li><a href="#kalkulator">Web App & Landing Page</a></li>
-              <li><a href="#kalkulator">Tugas Kuliah & Skripsi</a></li>
-              <li><a href="#kalkulator">Bot Telegram & Discord</a></li>
-              <li><a href="#kalkulator">Emergency Bug Fixing</a></li>
-              <li><a href="#kalkulator">UI/UX Design Figma</a></li>
+              <li><a href="/calculator?service=web-dev">Web App & Landing Page</a></li>
+              <li><a href="/calculator?service=tugas-skripsi">Tugas Kuliah & Skripsi</a></li>
+              <li><a href="/calculator?service=bot-automation">Bot Telegram & Discord</a></li>
+              <li><a href="/calculator?service=bug-fixing">Emergency Bug Fixing</a></li>
+              <li><a href="/calculator?service=uiux-design">UI/UX Design Figma</a></li>
             </ul>
           </div>
 
           {/* Coffee Easter Egg */}
           <div className="footer-col coffee-col">
-            <h4 className="footer-col-title">Tongkrongan Hub</h4>
+            <h4 className="footer-col-title">{t.footer.hubTitle}</h4>
             <p className="coffee-desc">
-              Kopi adalah bensin utama kami saat nuntasin deadline jam 3 pagi.
+              {t.footer.hubDesc}
             </p>
             <button onClick={handleGiveCoffee} className="coffee-btn glass-panel">
               <Coffee size={18} className="coffee-icon pulse" />
-              <span>Traktir Kopi ({coffeeCount})</span>
+              <span>{t.footer.treatCoffee} ({coffeeCount})</span>
             </button>
-            <span className="coffee-hint">*Klik untuk kirim energi kopi ke dev</span>
+            <span className="coffee-hint">{t.footer.coffeeHint}</span>
           </div>
         </div>
 
         {/* Bottom Bar */}
         <div className="footer-bottom">
           <p className="copyright-text">
-            © {new Date().getFullYear()} KOBRAT Dev Syndicate. Built with passion & lots of coffee.
+            © {new Date().getFullYear()} KOBRAT Dev Syndicate. {t.footer.copyright}
           </p>
           <div className="footer-badges">
-            <span className="mono status-tag">⚡ Hosted on Vercel</span>
-            <span className="mono status-tag">🛡️ Zero Drama Policy</span>
+            <span className="mono status-tag">{t.footer.hosted}</span>
+            <span className="mono status-tag">{t.footer.zeroDrama}</span>
           </div>
         </div>
       </div>

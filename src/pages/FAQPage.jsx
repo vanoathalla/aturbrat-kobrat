@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { HelpCircle, ChevronDown, MessageSquare, ShieldCheck, HeartHandshake } from 'lucide-react';
+import { HelpCircle, ChevronDown, MessageSquare, HeartHandshake } from 'lucide-react';
 import { KOBRAT_DATA } from '../data/kobratData';
+import { useApp } from '../context/AppContext';
 
 export default function FAQPage() {
+  const { t } = useApp();
   const [openIdx, setOpenIdx] = useState(0);
 
   const toggleAccordion = (idx) => {
@@ -16,13 +18,13 @@ export default function FAQPage() {
         <div className="section-header-center">
           <div className="section-tag">
             <HelpCircle size={14} />
-            <span>PUSAT BANTUAN</span>
+            <span>{t.faq.tag}</span>
           </div>
           <h1 className="section-title">
-            Frequently Asked <span className="gradient-text">Questions</span>
+            {t.faq.title}<span className="gradient-text">{t.faq.titleHighlight}</span>
           </h1>
           <p className="section-desc">
-            Pertanyaan yang sering banget ditanyakan seputar alur kerja, garansi revisi, bimbingan kode, dan sistem pembayaran di Kobrat.
+            {t.faq.desc}
           </p>
         </div>
 
@@ -58,8 +60,8 @@ export default function FAQPage() {
           <div className="faq-contact-info">
             <HeartHandshake size={32} className="contact-icon" />
             <div>
-              <h3 className="contact-title">Punya Pertanyaan Spesifik yang Belum Terjawab?</h3>
-              <p className="contact-desc">Admin dan squad dev kita standby buat diskusi santai tanpa dipungut biaya apapun.</p>
+              <h3 className="contact-title">{t.faq.helpTitle}</h3>
+              <p className="contact-desc">{t.faq.helpDesc}</p>
             </div>
           </div>
           <a
@@ -69,7 +71,7 @@ export default function FAQPage() {
             className="btn-primary contact-wa-btn"
           >
             <MessageSquare size={16} />
-            <span>Tanya via WhatsApp</span>
+            <span>{t.faq.btnAsk}</span>
           </a>
         </div>
       </div>

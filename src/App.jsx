@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
+import { AppProvider } from './context/AppContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Terminal from './components/Terminal';
@@ -36,42 +37,44 @@ export default function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <div className="kobrat-app">
-        {/* iOS Floating Island Navbar */}
-        <Navbar
-          onOpenTerminal={() => setIsTerminalOpen(true)}
-          onShowToast={showToast}
-        />
+    <AppProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        <div className="kobrat-app">
+          {/* iOS Floating Island Navbar with Language & Theme Toggles */}
+          <Navbar
+            onOpenTerminal={() => setIsTerminalOpen(true)}
+            onShowToast={showToast}
+          />
 
-        {/* Page Routing */}
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<Home onOpenTerminal={() => setIsTerminalOpen(true)} />} />
-            <Route path="/services" element={<ServicesPage />} />
-            <Route path="/calculator" element={<CalculatorPage onShowToast={showToast} />} />
-            <Route path="/squad" element={<SquadPage />} />
-            <Route path="/portfolio" element={<PortfolioPage />} />
-            <Route path="/faq" element={<FAQPage />} />
-          </Routes>
-        </main>
+          {/* Page Routing */}
+          <main className="main-content">
+            <Routes>
+              <Route path="/" element={<Home onOpenTerminal={() => setIsTerminalOpen(true)} />} />
+              <Route path="/services" element={<ServicesPage />} />
+              <Route path="/calculator" element={<CalculatorPage onShowToast={showToast} />} />
+              <Route path="/squad" element={<SquadPage />} />
+              <Route path="/portfolio" element={<PortfolioPage />} />
+              <Route path="/faq" element={<FAQPage />} />
+            </Routes>
+          </main>
 
-        {/* Footer */}
-        <Footer onShowToast={showToast} />
+          {/* Footer */}
+          <Footer onShowToast={showToast} />
 
-        {/* Interactive CLI Terminal Modal */}
-        <Terminal
-          isOpen={isTerminalOpen}
-          onClose={() => setIsTerminalOpen(false)}
-        />
+          {/* Interactive CLI Terminal Modal */}
+          <Terminal
+            isOpen={isTerminalOpen}
+            onClose={() => setIsTerminalOpen(false)}
+          />
 
-        {/* Global Toast Alerts */}
-        <Toast
-          message={toastMessage}
-          onClose={() => setToastMessage('')}
-        />
-      </div>
-    </BrowserRouter>
+          {/* Global Toast Alerts */}
+          <Toast
+            message={toastMessage}
+            onClose={() => setToastMessage('')}
+          />
+        </div>
+      </BrowserRouter>
+    </AppProvider>
   );
 }

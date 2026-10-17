@@ -2,8 +2,11 @@ import React from 'react';
 import { Users, ExternalLink, Code2, Sparkles, Terminal } from 'lucide-react';
 import { GithubIcon } from '../components/Icons';
 import { KOBRAT_DATA } from '../data/kobratData';
+import { useApp } from '../context/AppContext';
 
 export default function SquadPage() {
+  const { t } = useApp();
+
   return (
     <div className="page-wrapper squad-page">
       <div className="container">
@@ -11,51 +14,59 @@ export default function SquadPage() {
         <div className="section-header-center">
           <div className="section-tag">
             <Users size={14} />
-            <span>THE CREW</span>
+            <span>{t.squad.tag}</span>
           </div>
           <h1 className="section-title">
-            Kenalan Sama <span className="gradient-text">Squad KOBRAT</span>
+            {t.squad.title}<span className="gradient-text">{t.squad.titleHighlight}</span>
           </h1>
           <p className="section-desc">
-            Bukan sekadar koder individu. Kami circle tongkrongan yang tiap hari barengan ngebahas tech stack baru, adu argumen tab vs space, dan siap jadi carry deadline lu.
+            {t.squad.desc}
           </p>
         </div>
 
         {/* Squad Lore Box */}
         <div className="squad-lore-card glass-panel">
           <div className="lore-header">
-            <span className="mono status-tag">📜 THE KOBRAT MANIFESTO</span>
+            <span className="mono status-tag">{t.squad.manifestoTag}</span>
           </div>
           <p className="lore-text">
-            Berawal dari server Discord kecil tempat sambat tugas ngoding dan begadang bareng, Kobrat bertransformasi jadi sindikat dev solid. Filosofi kita simpel: <em>"Kodingan lu adalah kodingan kita—rapi, anti-drama, dan selalu siap dibedah bareng biar lu paham luar dalem."</em>
+            {t.squad.manifestoText}
           </p>
         </div>
 
-        {/* Squad Grid */}
+        {/* Squad Grid: 8 Members */}
         <div className="squad-grid">
           {KOBRAT_DATA.squad.map((member) => (
             <div key={member.id} className="squad-card glass-panel">
-              <div className="squad-card-top">
-                <div 
-                  className="squad-avatar"
-                  style={{ background: member.avatarBg }}
-                >
-                  <span className="avatar-initials">{member.name.charAt(0)}</span>
+              {/* Photo & Live Status Banner */}
+              <div className="squad-photo-frame">
+                <img
+                  src={member.photo}
+                  alt={member.name}
+                  className="squad-member-photo"
+                  loading="lazy"
+                />
+                <div className="squad-nickname-tag">
+                  <span>{member.nickname}</span>
                 </div>
-                <div className="squad-status-badge">
+                <div className="squad-status-floating">
+                  <span className="ping-dot"></span>
                   <span>{member.status}</span>
                 </div>
               </div>
 
+              {/* Name & Role */}
               <div className="squad-info">
                 <h2 className="squad-name">{member.name}</h2>
                 <span className="squad-role">{member.role}</span>
               </div>
 
+              {/* Signature Quote */}
               <div className="squad-quote">
                 <p>"{member.quote}"</p>
               </div>
 
+              {/* Skills Tags */}
               <div className="squad-skills">
                 {member.skills.map((skill, idx) => (
                   <span key={idx} className="squad-skill-pill">
@@ -64,6 +75,7 @@ export default function SquadPage() {
                 ))}
               </div>
 
+              {/* Footer Profile Link */}
               <div className="squad-card-footer">
                 <a
                   href={member.github}
