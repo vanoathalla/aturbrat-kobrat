@@ -1,14 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Terminal as TerminalIcon, X, Maximize2, Minimize2, CornerDownLeft, Sparkles } from 'lucide-react';
+import { Terminal as TerminalIcon, X, CornerDownLeft, Sparkles, Bot, Loader2 } from 'lucide-react';
 import { KOBRAT_DATA } from '../data/kobratData';
+import { askKobratAi, resetAiConversation } from '../utils/aiService';
 
 export default function Terminal({ isOpen, onClose }) {
   const [history, setHistory] = useState([
-    { type: 'system', text: '⚡ KOBRAT OS v2.4.0 [Interactive Dev Shell]' },
-    { type: 'system', text: 'Ketik "help" atau klik tombol pintasan di bawah untuk eksplorasi.' },
+    { type: 'system', text: '⚡ KOBRAT OS v2.5.0 [Neural AI Dev Shell]' },
+    { type: 'ai-badge', text: '🤖 KOBRAT AI ENGINE: ONLINE (Tanyakan APAPUN: Kodingan, Debugging, Teori, Sains, Umum, dll)' },
+    { type: 'system', text: '💡 Tips: Langsung ketik pertanyaanmu atau gunakan command shell: help, services, team, clear' },
   ]);
   const [inputVal, setInputVal] = useState('');
   const [isMatrixMode, setIsMatrixMode] = useState(false);
+  const [isAiThinking, setIsAiThinking] = useState(false);
   const terminalEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -20,7 +23,7 @@ export default function Terminal({ isOpen, onClose }) {
 
   useEffect(() => {
     terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [history, isMatrixMode]);
+  }, [history, isMatrixMode, isAiThinking]);
 
   const devQuotes = [
     "Kodingan jalan jangan disentuh, nafas aja jangan kenceng-kenceng.",
@@ -30,106 +33,148 @@ export default function Terminal({ isOpen, onClose }) {
     "Tidur jam 4 subuh bukan karena insomnia, tapi karena semi-colon lupa ditaruh.",
   ];
 
-  const handleCommand = (rawCmd) => {
-    const cmd = rawCmd.trim().toLowerCase();
-    if (!cmd) return;
+  const handleCommand = async (rawCmd) => {
+    const cmd = rawCmd.trim();
+    if (!cmd || isAiThinking) return;
 
-    const newHistory = [...history, { type: 'user', text: `$ ${rawCmd}` }];
+    const lowerCmd = cmd.toLowerCase();
 
-    switch (cmd) {
+    // Append user input to history
+    setHistory(prev => [...prev, { type: 'user', text: `$ ${cmd}` }]);
+    setInputVal('');
+
+    // Built-in Shell Commands
+    switch (lowerCmd) {
       case 'help':
-        newHistory.push({
-          type: 'output',
-          text: `COMMANDS TERSEDIA:\n` +
-            `  help       - Menampilkan panduan ini\n` +
-            `  services   - Daftar layanan kodingan & range harga\n` +
-            `  team       - Profil squad dev Kobrat\n` +
-            `  pricing    - Info ringkas skema tarif & garansi\n` +
-            `  matrix     - Mode visual hacker matrix\n` +
-            `  quote      - Kutipan developer pelepas stres\n` +
-            `  whoami     - Status user saat ini\n` +
-            `  order      - Link instan konsultasi WhatsApp\n` +
-            `  clear      - Bersihkan layar shell`
-        });
-        break;
+        setHistory(prev => [
+          ...prev,
+          {
+            type: 'output',
+            text: `COMMANDS TERSEDIA:\n` +
+              `  help       - Menampilkan panduan shell\n` +
+              `  services   - Daftar layanan kodingan & range harga\n` +
+              `  team       - Profil 8 squad dev Kobrat\n` +
+              `  pricing    - Info ringkas skema tarif & garansi\n` +
+              `  matrix     - Mode visual hacker matrix\n` +
+              `  quote      - Kutipan developer pelepas stres\n` +
+              `  whoami     - Status user saat ini\n` +
+              `  order      - Link instan konsultasi WhatsApp\n` +
+              `  clear      - Bersihkan layar & reset memori chat\n\n` +
+              `🤖 KOBRAT AI CHAT:\n` +
+              `  Tanyakan APAPUN langsung di sini tanpa prefix!\n` +
+              `  Contoh:\n` +
+              `  • "jelasin apa itu recursion di python"\n` +
+              `  • "cara bikin auth JWT di express.js"\n` +
+              `  • "rekomendasi laptop buat ngoding 2026"\n` +
+              `  • "siapa aja anggota kobrat dan keahliannya?"`
+          }
+        ]);
+        return;
 
       case 'services':
       case 'jasa':
-        newHistory.push({
-          type: 'output',
-          text: `LAYANAN KOBRAT SYNDICATE:\n` +
-            KOBRAT_DATA.services.map(s => `  • ${s.title.padEnd(30, ' ')} -> Mulai ${s.startingPrice} (${s.turnaround})`).join('\n') +
-            `\n\n💡 Ketik "order" atau scroll ke bagian Kalkulator untuk estimasi detail!`
-        });
-        break;
+        setHistory(prev => [
+          ...prev,
+          {
+            type: 'output',
+            text: `LAYANAN KOBRAT SYNDICATE:\n` +
+              KOBRAT_DATA.services.map(s => `  • ${s.title.padEnd(30, ' ')} -> Mulai ${s.startingPrice} (${s.turnaround})`).join('\n') +
+              `\n\n💡 Ketik "order" atau cek menu Kalkulator untuk estimasi detail!`
+          }
+        ]);
+        return;
 
       case 'team':
       case 'squad':
-        newHistory.push({
-          type: 'output',
-          text: `KOBRAT CREW:\n` +
-            KOBRAT_DATA.squad.map(m => `  • ${m.name} [${m.role}]\n    Skills: ${m.skills.join(', ')}\n    Status: ${m.status}`).join('\n\n')
-        });
-        break;
+        setHistory(prev => [
+          ...prev,
+          {
+            type: 'output',
+            text: `KOBRAT CREW (8 DEV SAHABAT):\n` +
+              KOBRAT_DATA.squad.map(m => `  • ${m.name} (${m.nickname}) [${m.role}]\n    Skills: ${m.skills.join(', ')}\n    Status: ${m.status}`).join('\n\n')
+          }
+        ]);
+        return;
 
       case 'pricing':
-        newHistory.push({
-          type: 'output',
-          text: `ESTIMASI HARGA SINGKAT:\n` +
-            `  - Tugas Harian / Praktikum : Rp 150k - Rp 350k\n` +
-            `  - Landing Page Modern     : Rp 350k - Rp 700k\n` +
-            `  - Web App Fullstack       : Rp 650k - Rp 1.8jt\n` +
-            `  - Bot Discord / Telegram  : Rp 200k - Rp 500k\n` +
-            `  - Skripsi / Tugas Akhir   : Rp 850k - Rp 2.5jt (Include Bimbingan GMeet)\n` +
-            `  - Emergency Bug Fixing    : Mulai Rp 75k\n` +
-            `*Harga menyesuaikan kompleksitas & deadline.`
-        });
-        break;
+        setHistory(prev => [
+          ...prev,
+          {
+            type: 'output',
+            text: `ESTIMASI HARGA SINGKAT:\n` +
+              `  - Tugas Harian / Praktikum : Rp 150k - Rp 350k\n` +
+              `  - Landing Page Modern     : Rp 350k - Rp 700k\n` +
+              `  - Web App Fullstack       : Rp 650k - Rp 1.8jt\n` +
+              `  - Bot Discord / Telegram  : Rp 200k - Rp 500k\n` +
+              `  - Skripsi / Tugas Akhir   : Rp 850k - Rp 2.5jt (Include Bimbingan GMeet)\n` +
+              `  - Emergency Bug Fixing    : Mulai Rp 75k\n` +
+              `*Harga menyesuaikan kompleksitas & deadline.`
+          }
+        ]);
+        return;
 
       case 'quote':
         const rand = devQuotes[Math.floor(Math.random() * devQuotes.length)];
-        newHistory.push({ type: 'output', text: `💬 "${rand}"` });
-        break;
+        setHistory(prev => [...prev, { type: 'output', text: `💬 "${rand}"` }]);
+        return;
 
       case 'whoami':
-        newHistory.push({ type: 'output', text: `👤 You are a visitor in search of high-caliber dev wizards.` });
-        break;
+        setHistory(prev => [...prev, { type: 'output', text: `👤 You are a visitor seeking elite dev wizards & brotherhood lore.` }]);
+        return;
 
       case 'order':
         window.open(`https://wa.me/${KOBRAT_DATA.brand.whatsappNumber}?text=Halo%20Kobrat!%20Saya%20tertarik%20order%20lewat%20terminal%20web`, '_blank');
-        newHistory.push({ type: 'output', text: `🚀 Membuka WhatsApp Kobrat... Silakan sampaikan kebutuhanmu!` });
-        break;
+        setHistory(prev => [...prev, { type: 'output', text: `🚀 Membuka WhatsApp Kobrat... Silakan sampaikan kebutuhanmu!` }]);
+        return;
 
       case 'matrix':
         setIsMatrixMode(prev => !prev);
-        newHistory.push({ type: 'output', text: `⚡ Toggling Matrix Rain Animation Mode!` });
-        break;
+        setHistory(prev => [...prev, { type: 'output', text: `⚡ Toggling Matrix Rain Animation Mode!` }]);
+        return;
 
       case 'admin':
         window.location.href = '/admin';
-        newHistory.push({ type: 'output', text: `🔐 Redirecting to KOBRAT Member Portal (/admin)...` });
-        break;
+        setHistory(prev => [...prev, { type: 'output', text: `🔐 Redirecting to KOBRAT Member Portal (/admin)...` }]);
+        return;
 
       case 'clear':
-        setHistory([]);
-        setInputVal('');
+        resetAiConversation();
+        setHistory([
+          { type: 'system', text: '⚡ Terminal cleared. AI conversation context has been reset.' }
+        ]);
         return;
 
       case 'sudo rm -rf /':
       case 'rm -rf /':
-        newHistory.push({ type: 'output', text: `🛡️ Nice try! Kobrat core is secured with biometric firewall.` });
-        break;
+        setHistory(prev => [...prev, { type: 'output', text: `🛡️ Nice try! Kobrat core is secured with biometric firewall.` }]);
+        return;
 
       default:
-        newHistory.push({
-          type: 'error',
-          text: `zsh: command not found: ${rawCmd}. Ketik "help" untuk melihat daftar perintah.`
-        });
+        // ROUTE ALL OTHER QUERIES TO KOBRAT NEURAL AI!
+        setIsAiThinking(true);
+        try {
+          const aiResponse = await askKobratAi(cmd);
+          setHistory(prev => [
+            ...prev,
+            {
+              type: 'ai',
+              text: `🤖 KOBRAT AI:\n${aiResponse}`
+            }
+          ]);
+        } catch (error) {
+          setHistory(prev => [
+            ...prev,
+            {
+              type: 'error',
+              text: `⚠️ Maaf, ada kendala saat menghubungi AI. Coba tanyakan lagi atau ketik 'help'.`
+            }
+          ]);
+        } finally {
+          setIsAiThinking(false);
+          setTimeout(() => inputRef.current?.focus(), 50);
+        }
         break;
     }
-
-    setHistory(newHistory);
-    setInputVal('');
   };
 
   const handleKeyDown = (e) => {
@@ -150,10 +195,16 @@ export default function Terminal({ isOpen, onClose }) {
             <span className="dot dot-yellow"></span>
             <span className="dot dot-green"></span>
           </div>
+
           <div className="terminal-title mono">
-            <TerminalIcon size={14} /> kobrat@syndicate:~ (bash)
+            <TerminalIcon size={14} /> kobrat@syndicate:~ (ai-shell)
+            <span className="terminal-ai-status">
+              <span className="ai-dot-pulse"></span>
+              <span>AI ACTIVE</span>
+            </span>
           </div>
-          <button className="terminal-close-btn" onClick={onClose}>
+
+          <button className="terminal-close-btn" onClick={onClose} title="Tutup Terminal">
             <X size={16} />
           </button>
         </div>
@@ -166,6 +217,14 @@ export default function Terminal({ isOpen, onClose }) {
             </div>
           ))}
 
+          {/* AI Thinking Animation */}
+          {isAiThinking && (
+            <div className="term-line term-ai-thinking">
+              <span className="thinking-spinner">⚡</span>
+              <span>KOBRAT AI sedang menganalisis & meracik jawaban...</span>
+            </div>
+          )}
+
           {/* Matrix Easter Egg visual */}
           {isMatrixMode && (
             <div className="matrix-rain">
@@ -175,31 +234,41 @@ export default function Terminal({ isOpen, onClose }) {
 
           {/* Active Input Line */}
           <div className="term-input-line">
-            <span className="term-prompt">guest@kobrat:~$</span>
+            <span className="term-prompt">user@kobrat:~$</span>
             <input
               ref={inputRef}
               type="text"
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
               onKeyDown={handleKeyDown}
+              disabled={isAiThinking}
               className="term-input"
               autoFocus
-              placeholder="ketik command..."
+              placeholder={isAiThinking ? "Menunggu jawaban AI..." : "Ketik pertanyaan apa saja (atau command: help, services, team)..."}
             />
           </div>
           <div ref={terminalEndRef} />
         </div>
 
-        {/* Quick Command Chips */}
+        {/* Quick Command & AI Prompt Chips */}
         <div className="terminal-chips">
           <span className="chips-label">Quick:</span>
-          {['help', 'services', 'team', 'pricing', 'quote', 'order', 'matrix', 'clear'].map((cmd) => (
+          {[
+            { label: 'help', cmd: 'help' },
+            { label: 'services', cmd: 'services' },
+            { label: 'team', cmd: 'team' },
+            { label: '💬 Jelasin Git', cmd: 'Jelasin git rebase vs merge singkat dong' },
+            { label: '💬 Tips Ngoding', cmd: 'Tips buat pemula yang baru belajar ngoding' },
+            { label: 'order', cmd: 'order' },
+            { label: 'clear', cmd: 'clear' },
+          ].map((item, idx) => (
             <button
-              key={cmd}
-              onClick={() => handleCommand(cmd)}
+              key={idx}
+              onClick={() => handleCommand(item.cmd)}
+              disabled={isAiThinking}
               className="chip-btn"
             >
-              {cmd}
+              {item.label}
             </button>
           ))}
         </div>
