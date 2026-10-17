@@ -1,11 +1,12 @@
 import React from 'react';
-import { Users, ExternalLink, Code2, Sparkles, Terminal, Activity, Settings2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Users, ExternalLink, Code2, Sparkles, Terminal, Activity, ShieldCheck, Lock } from 'lucide-react';
 import { GithubIcon } from '../components/Icons';
 import { KOBRAT_DATA } from '../data/kobratData';
 import { useApp } from '../context/AppContext';
 
 export default function SquadPage() {
-  const { t, squadPresence, setIsPresenceModalOpen, onlineMembersCount } = useApp();
+  const { t, squadPresence, onlineMembersCount, isAdminAuthenticated } = useApp();
 
   return (
     <div className="page-wrapper squad-page">
@@ -23,22 +24,28 @@ export default function SquadPage() {
             {t.squad.desc}
           </p>
 
-          {/* Quick Presence Trigger Banner */}
+          {/* Live Presence Status Bar (Read-only for guests, Admin link for crew) */}
           <div className="presence-banner-bar glass-panel">
             <div className="presence-bar-left">
               <span className="live-pulse-badge">
                 <span className="ping-dot"></span>
                 <span className="mono">{onlineMembersCount} dari 8 Dev Sedang Online</span>
               </span>
-              <span className="presence-bar-desc">Anggota circle bisa login/ganti status aktivitas kodingan secara real-time.</span>
+              <span className="presence-bar-desc">
+                Status kodingan diperbarui langsung oleh anggota Kobrat dari Duty Console.
+              </span>
             </div>
-            <button
-              onClick={() => setIsPresenceModalOpen(true)}
-              className="btn-primary presence-bar-btn"
-            >
-              <Settings2 size={16} />
-              <span>Update Status Dev</span>
-            </button>
+
+            {isAdminAuthenticated ? (
+              <Link to="/admin" className="btn-primary presence-bar-btn">
+                <ShieldCheck size={16} />
+                <span>Buka Admin Console</span>
+              </Link>
+            ) : (
+              <div className="presence-guest-badge">
+                <span className="mono status-tag">🟢 Live Synchronized</span>
+              </div>
+            )}
           </div>
         </div>
 

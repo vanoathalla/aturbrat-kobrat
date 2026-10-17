@@ -15,6 +15,11 @@ export function AppProvider({ children }) {
     return localStorage.getItem('kobrat_lang') || 'id';
   });
 
+  // Admin Authentication State
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(() => {
+    return localStorage.getItem('kobrat_admin_auth') === 'true';
+  });
+
   // Slot Management State
   const [slotsCount, setSlotsCount] = useState(() => {
     const saved = localStorage.getItem('kobrat_slots_count');
@@ -34,7 +39,6 @@ export function AppProvider({ children }) {
         return JSON.parse(saved);
       } catch (e) {}
     }
-    // Initial defaults for all 8 members
     const initial = {};
     KOBRAT_DATA.squad.forEach((m, idx) => {
       initial[m.id] = {
@@ -46,9 +50,6 @@ export function AppProvider({ children }) {
     });
     return initial;
   });
-
-  // Modal open/close for Presence Hub
-  const [isPresenceModalOpen, setIsPresenceModalOpen] = useState(false);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -80,13 +81,28 @@ export function AppProvider({ children }) {
     setLang(prev => (prev === 'id' ? 'en' : 'id'));
   };
 
+  const loginAdmin = (passcode) => {
+    // Default circle passcode: kobrat2026 or 1234
+    if (passcode.trim() === 'kobrat2026' || passcode.trim() === '1234') {
+      setIsAdminAuthenticated(true);
+      localStorage.setItem('kobrat_admin_auth', 'true');
+      return true;
+    }
+    return false;
+  };
+
+  const logoutAdmin = () => {
+    setIsAdminAuthenticated(false);
+    localStorage.removeItem('kobrat_admin_auth');
+  };
+
   const updateMemberPresence = (memberId, { isOnline, status, activity }) => {
     setSquadPresence(prev => ({
       ...prev,
       [memberId]: {
-        isOnline,
+        isOnline: isOnline !== undefined ? isOnline : prev[memberId]?.isOnline,
         status: status || prev[memberId]?.status,
-        activity: activity || prev[memberId]?.activity,
+        activity: activity !== undefined ? activity : prev[memberId]?.activity,
         lastActive: "Baru saja",
       },
     }));
@@ -107,6 +123,9 @@ export function AppProvider({ children }) {
         setLang,
         toggleLang,
         t,
+        isAdminAuthenticated,
+        loginAdmin,
+        logoutAdmin,
         slotsCount,
         setSlotsCount,
         isSlotOpen,
@@ -114,8 +133,6 @@ export function AppProvider({ children }) {
         squadPresence,
         updateMemberPresence,
         onlineMembersCount,
-        isPresenceModalOpen,
-        setIsPresenceModalOpen,
       }}
     >
       {children}

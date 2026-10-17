@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { Volume2, VolumeX, Menu, X, Terminal, MessageSquare, Sun, Moon, Globe, Users, ShieldCheck } from 'lucide-react';
+import { Volume2, VolumeX, Menu, X, Terminal, MessageSquare, Sun, Moon, Globe, Shield, ShieldCheck } from 'lucide-react';
 import { ambientSynth } from '../utils/audioSynth';
 import { KOBRAT_DATA } from '../data/kobratData';
 import { useApp } from '../context/AppContext';
@@ -15,7 +15,7 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
     isSlotOpen, 
     slotsCount,
     onlineMembersCount,
-    setIsPresenceModalOpen 
+    isAdminAuthenticated
   } = useApp();
 
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
@@ -39,6 +39,14 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
     { label: t.nav.portfolio, path: "/portfolio" },
     { label: t.nav.faq, path: "/faq" },
   ];
+
+  const handlePresenceClick = () => {
+    onShowToast?.(
+      lang === 'id'
+        ? `⚡ Status Tim: ${onlineMembersCount} dari 8 dev sedang aktif ngoding!`
+        : `⚡ Team Status: ${onlineMembersCount} of 8 devs are currently online!`
+    );
+  };
 
   return (
     <header className="ios-navbar-wrapper">
@@ -71,15 +79,27 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
 
         {/* Actions Deck */}
         <div className="ios-actions-deck">
-          {/* Presence & Slot Manager Hub Button */}
+          {/* Live Presence Indicator */}
           <button
-            onClick={() => setIsPresenceModalOpen(true)}
+            onClick={handlePresenceClick}
             className="ios-action-pill presence-pill"
-            title="Kelola Slot & Status Anggota"
+            title="Status Kehadiran Tim Kobrat"
           >
             <span className={`status-dot ${isSlotOpen ? 'online' : 'offline'}`}></span>
-            <span className="action-label mono">{onlineMembersCount} Aktif</span>
+            <span className="action-label mono">{onlineMembersCount} Dev Aktif</span>
           </button>
+
+          {/* If Logged In as Admin -> Show Admin Badge */}
+          {isAdminAuthenticated && (
+            <Link
+              to="/admin"
+              className="ios-action-pill admin-nav-pill"
+              title="KOBRAT Command Center"
+            >
+              <ShieldCheck size={14} className="admin-icon" />
+              <span className="mono action-label">Admin</span>
+            </Link>
+          )}
 
           {/* Language Toggle (ID / EN) */}
           <button
@@ -179,17 +199,17 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
               </NavLink>
             ))}
 
-            {/* Mobile Presence Trigger */}
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                setIsPresenceModalOpen(true);
-              }}
-              className="sheet-nav-item presence-sheet-btn"
-            >
-              <span>⚡ Status & Slot Manager ({onlineMembersCount} Aktif)</span>
-              <span className="sheet-arrow">›</span>
-            </button>
+            {/* Mobile Admin Link if logged in */}
+            {isAdminAuthenticated && (
+              <Link
+                to="/admin"
+                className="sheet-nav-item admin-sheet-link"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <span>🛡️ KOBRAT Command Center (Admin)</span>
+                <span className="sheet-arrow">›</span>
+              </Link>
+            )}
 
             {/* Mobile Actions: Lang, Theme, Audio */}
             <div className="sheet-actions-row">

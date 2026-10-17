@@ -7,7 +7,6 @@ import Footer from './components/Footer';
 import Terminal from './components/Terminal';
 import Toast from './components/Toast';
 import ScrollToTop from './components/ScrollToTop';
-import PresenceModal from './components/PresenceModal';
 
 // Multi-Pages
 import Home from './pages/Home';
@@ -16,9 +15,9 @@ import CalculatorPage from './pages/CalculatorPage';
 import SquadPage from './pages/SquadPage';
 import PortfolioPage from './pages/PortfolioPage';
 import FAQPage from './pages/FAQPage';
+import AdminPage from './pages/AdminPage';
 
 function AppContent() {
-  const { isPresenceModalOpen, setIsPresenceModalOpen } = useApp();
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
@@ -57,6 +56,8 @@ function AppContent() {
             <Route path="/squad" element={<SquadPage />} />
             <Route path="/portfolio" element={<PortfolioPage />} />
             <Route path="/faq" element={<FAQPage />} />
+            {/* Dedicated Protected Admin Route */}
+            <Route path="/admin" element={<AdminPage onShowToast={showToast} />} />
           </Routes>
         </main>
 
@@ -67,13 +68,6 @@ function AppContent() {
         <Terminal
           isOpen={isTerminalOpen}
           onClose={() => setIsTerminalOpen(false)}
-        />
-
-        {/* Squad Presence & Slot Management Modal */}
-        <PresenceModal
-          isOpen={isPresenceModalOpen}
-          onClose={() => setIsPresenceModalOpen(false)}
-          onShowToast={showToast}
         />
 
         {/* Global Toast Alerts */}

@@ -105,6 +105,11 @@ export default function Terminal({ isOpen, onClose }) {
         newHistory.push({ type: 'output', text: `⚡ Toggling Matrix Rain Animation Mode!` });
         break;
 
+      case 'admin':
+        window.location.href = '/admin';
+        newHistory.push({ type: 'output', text: `🔐 Redirecting to KOBRAT Member Portal (/admin)...` });
+        break;
+
       case 'clear':
         setHistory([]);
         setInputVal('');
