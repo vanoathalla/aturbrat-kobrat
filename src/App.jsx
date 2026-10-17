@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import './App.css';
 import { AppProvider, useApp } from './context/AppContext';
 import Navbar from './components/Navbar';
@@ -18,7 +18,10 @@ import FAQPage from './pages/FAQPage';
 import AdminPage from './pages/AdminPage';
 import ArchivePage from './pages/ArchivePage';
 
-function AppContent() {
+function AppLayout() {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
@@ -39,17 +42,19 @@ function AppContent() {
   }, []);
 
   return (
-    <BrowserRouter>
+    <>
       <ScrollToTop />
-      <div className="kobrat-app">
-        {/* iOS Floating Island Navbar */}
-        <Navbar
-          onOpenTerminal={() => setIsTerminalOpen(true)}
-          onShowToast={showToast}
-        />
+      <div className={`kobrat-app ${isAdminRoute ? 'is-admin-view' : ''}`}>
+        {/* Only show Public User Navbar on non-admin routes */}
+        {!isAdminRoute && (
+          <Navbar
+            onOpenTerminal={() => setIsTerminalOpen(true)}
+            onShowToast={showToast}
+          />
+        )}
 
         {/* Page Routing */}
-        <main className="main-content">
+        <main className={`main-content ${isAdminRoute ? 'admin-main-content' : ''}`}>
           <Routes>
             <Route path="/" element={<Home onOpenTerminal={() => setIsTerminalOpen(true)} />} />
             <Route path="/services" element={<ServicesPage />} />
@@ -59,12 +64,20 @@ function AppContent() {
             <Route path="/portfolio" element={<PortfolioPage />} />
             <Route path="/faq" element={<FAQPage />} />
             {/* Dedicated Protected Admin Route */}
-            <Route path="/admin" element={<AdminPage onShowToast={showToast} />} />
+            <Route 
+              path="/admin" 
+              element={
+                <AdminPage 
+                  onShowToast={showToast} 
+                  onOpenTerminal={() => setIsTerminalOpen(true)} 
+                />
+              } 
+            />
           </Routes>
         </main>
 
-        {/* Footer */}
-        <Footer onShowToast={showToast} />
+        {/* Only show Public User Footer on non-admin routes */}
+        {!isAdminRoute && <Footer onShowToast={showToast} />}
 
         {/* Interactive CLI Terminal Modal */}
         <Terminal
@@ -78,14 +91,16 @@ function AppContent() {
           onClose={() => setToastMessage('')}
         />
       </div>
-    </BrowserRouter>
+    </>
   );
 }
 
 export default function App() {
   return (
     <AppProvider>
-      <AppContent />
+      <BrowserRouter>
+        <AppLayout />
+      </BrowserRouter>
     </AppProvider>
   );
 }

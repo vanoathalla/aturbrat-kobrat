@@ -166,78 +166,111 @@ export default function Navbar({ onOpenTerminal, onShowToast }) {
         </div>
       </div>
 
-      {/* iOS Style Mobile Sheet Menu */}
+      {/* Mobile Left Sidebar Drawer */}
       {mobileMenuOpen && (
-        <div className="ios-mobile-sheet">
-          <div className="sheet-handle"></div>
-          
-          {/* Live Slot Status on Mobile */}
-          <div className="sheet-slot-banner">
-            <span className={`status-dot ${isSlotOpen ? 'online' : 'offline'}`}></span>
-            <span className="mono">
-              {isSlotOpen ? `OPEN SLOT (${slotsCount} Tersedia)` : 'FULL SLOT / WAITING LIST'}
-            </span>
-          </div>
-
-          <div className="sheet-nav-list">
-            {navItems.map((item, idx) => (
-              <NavLink
-                key={idx}
-                to={item.path}
-                className={({ isActive }) =>
-                  `sheet-nav-item ${isActive ? 'active' : ''}`
-                }
+        <>
+          <div 
+            className="mobile-drawer-overlay" 
+            onClick={() => setMobileMenuOpen(false)} 
+          />
+          <aside className="ios-mobile-drawer left-drawer">
+            <div className="drawer-header">
+              <div className="drawer-brand">
+                <div className="ios-logo-squircle">
+                  <span>🐍</span>
+                </div>
+                <div className="drawer-brand-text">
+                  <span className="brand-title">KOBRAT</span>
+                  <span className="brand-collab-badge">
+                    <span className="collab-circle">CIRCLE</span>
+                    <span className="collab-sep">×</span>
+                    <span className="collab-service">{lang === 'id' ? 'JASA' : 'DEV'}</span>
+                  </span>
+                </div>
+              </div>
+              <button 
+                className="drawer-close-btn" 
                 onClick={() => setMobileMenuOpen(false)}
+                title="Tutup Menu"
               >
-                <span>{item.label}</span>
-                <span className="sheet-arrow">›</span>
-              </NavLink>
-            ))}
-
-
-
-            {/* Mobile Actions: Lang, Theme, Audio */}
-            <div className="sheet-actions-row">
-              <button
-                onClick={() => {
-                  toggleLang();
-                  onShowToast?.(lang === 'id' ? "🌐 Language: English" : "🌐 Bahasa: Indonesia");
-                }}
-                className="sheet-action-pill"
-              >
-                <Globe size={15} />
-                <span>{lang.toUpperCase()}</span>
-              </button>
-              
-              <button
-                onClick={() => {
-                  toggleTheme();
-                  onShowToast?.(theme === 'dark' ? "☀️ Light Mode" : "🌙 Dark Mode");
-                }}
-                className="sheet-action-pill"
-              >
-                {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
-                <span>{theme === 'dark' ? "Light" : "Dark"}</span>
-              </button>
-
-              <button onClick={toggleAudio} className="sheet-action-pill">
-                {isPlayingAudio ? <Volume2 size={15} /> : <VolumeX size={15} />}
-                <span>Lo-Fi</span>
+                <X size={18} />
               </button>
             </div>
 
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenTerminal();
-              }}
-              className="sheet-nav-item mono-item"
-            >
-              <span>💻 Terminal KOBRAT CLI</span>
-              <span className="sheet-arrow">›</span>
-            </button>
-          </div>
-        </div>
+            {/* Live Slot Status on Mobile */}
+            <div className="sheet-slot-banner">
+              <span className={`status-dot ${isSlotOpen ? 'online' : 'offline'}`}></span>
+              <span className="mono">
+                {isSlotOpen ? `OPEN SLOT (${slotsCount} Tersedia)` : 'FULL SLOT / WAITING LIST'}
+              </span>
+            </div>
+
+            <nav className="sheet-nav-list">
+              {navItems.map((item, idx) => (
+                <NavLink
+                  key={idx}
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `sheet-nav-item ${isActive ? 'active' : ''}`
+                  }
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <span>{item.label}</span>
+                  <span className="sheet-arrow">›</span>
+                </NavLink>
+              ))}
+
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenTerminal();
+                }}
+                className="sheet-nav-item mono-item"
+              >
+                <span>💻 Terminal KOBRAT CLI (AI)</span>
+                <span className="sheet-arrow">›</span>
+              </button>
+            </nav>
+
+            {/* Mobile Actions: Lang, Theme, Audio */}
+            <div className="drawer-footer-actions">
+              <div className="sheet-actions-row">
+                <button
+                  onClick={() => {
+                    toggleLang();
+                    onShowToast?.(lang === 'id' ? "🌐 Language: English" : "🌐 Bahasa: Indonesia");
+                  }}
+                  className="sheet-action-pill"
+                >
+                  <Globe size={15} />
+                  <span>{lang.toUpperCase()}</span>
+                </button>
+                
+                <button
+                  onClick={() => {
+                    toggleTheme();
+                    onShowToast?.(theme === 'dark' ? "☀️ Light Mode" : "🌙 Dark Mode");
+                  }}
+                  className="sheet-action-pill"
+                >
+                  {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+                  <span>{theme === 'dark' ? "Light" : "Dark"}</span>
+                </button>
+
+                <button onClick={toggleAudio} className="sheet-action-pill">
+                  {isPlayingAudio ? <Volume2 size={15} /> : <VolumeX size={15} />}
+                  <span>Lo-Fi</span>
+                </button>
+              </div>
+
+              <div className="drawer-meta-info mono">
+                <span>KOBRAT OS v2.5.0</span>
+                <span>•</span>
+                <span>{onlineMembersCount} Dev Online</span>
+              </div>
+            </div>
+          </aside>
+        </>
       )}
     </header>
   );
